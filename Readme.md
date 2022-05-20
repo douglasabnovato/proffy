@@ -301,6 +301,15 @@ Um evento de programação organizado pelo Rocketseat para construir uma Page La
   <img alt="Dar aulas" title="#Proffy" src="./.github/tela-2.PNG" width="400px">
 </p>
 
+## 🚀 Próximo passo
+
+- responsividade
+- acessibilidade
+- modo dark / light
+- variação de cores
+- crud de ideias
+- hospedar
+
 ---- 
 
 .: Por [Douglas A B Novato - @douglasabnovato](https://linktr.ee/douglasabnovato)<br/>
