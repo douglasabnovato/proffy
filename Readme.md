@@ -295,6 +295,12 @@ Um evento de programação organizado pelo Rocketseat para construir uma Page La
 - [ ] 2.1. Não permitir o usuário colocar um novo campo de dia e horário, se o dia e hora anterior estiver vazio
 - [ ] 2.2. Funcionalidade de deletar um campo de dia e hora
 
+#### Resultado 
+- Construindo a aplicação em versões.
+<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
+  <img alt="Dar aulas" title="#Proffy" src="./.github/tela-2.PNG" width="400px">
+</p>
+
 ---- 
 
 .: Por [Douglas A B Novato - @douglasabnovato](https://linktr.ee/douglasabnovato)<br/>
