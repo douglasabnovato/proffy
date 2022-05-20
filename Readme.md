@@ -307,7 +307,6 @@ Um evento de programação organizado pelo Rocketseat para construir uma Page La
 - acessibilidade
 - modo dark / light
 - variação de cores
-- crud de ideias
 - hospedar
 
 ---- 
