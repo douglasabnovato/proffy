@@ -1,6 +1,6 @@
-### Next Level Week 2
+### Proffy 
 
-Um evento de programação organizado pelo Rocketseat para construir uma Page Landing seguindo um design apresentado no Figma.
+O Next Level Week 2 é um evento de programação organizado pelo Rocketseat para construir uma Page Landing seguindo um design apresentado no Figma.
 
 ### Proffy
 
