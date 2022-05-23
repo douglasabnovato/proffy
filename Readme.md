@@ -2,7 +2,7 @@
 
 O Next Level Week 2 é um evento de programação organizado pelo Rocketseat para construir uma Page Landing seguindo um design apresentado no Figma.
 
-### Proffy
+### Design
 
 - Proposta do design: Home<br/>
 ![Proffy](public/images/proposta-do-design-1.jpg)
