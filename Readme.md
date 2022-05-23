@@ -273,17 +273,9 @@ O Next Level Week 2 é um evento de programação organizado pelo Rocketseat par
 
 #### Encerramento 
 
-- [ ] v6.0.0 - Terminado 
-- [ ] 1. Revisar o código
-- [ ] 1.2. Revisar os comentários
-- [ ] 1.3. Revisar o Readme.md
-- [ ] 2. Fazer o deploy da Aplicação
-- [ ] 3. Escrever um artigo no Medium com as tecnologias, o desafio, o aprendizado, as dificuldades desse projeto
-- [ ] 4. Publicar no Linkedin 
-- [ ] 5. Live no Youtube - Encerramento NLW #2
-- [ ] 6. Método de Aprendizado: Prática, Foco, Grupo 
+- [x] 1. Método de Aprendizado: Prática, Foco, Grupo 
 
-#### Evoluir a aplicação
+#### 🚀 Evoluir a aplicação - Próximo passo 
 
 - [ ] v7.0.0 - Desafios
 - [ ] 1. Página de sucesso
@@ -294,20 +286,19 @@ O Next Level Week 2 é um evento de programação organizado pelo Rocketseat par
 - [ ] 2. Correção de bugs
 - [ ] 2.1. Não permitir o usuário colocar um novo campo de dia e horário, se o dia e hora anterior estiver vazio
 - [ ] 2.2. Funcionalidade de deletar um campo de dia e hora
+- [ ] 3.1. responsividade
+- [ ] 3.2. acessibilidade
+- [ ] 3.3. modo dark / light
+- [ ] 3.4. variação de cores
+- [ ] 3.5. hospedar
+- [ ] 3.6. Fazer o deploy da Aplicação
 
 #### Resultado 
+
 - Construindo a aplicação em versões.
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="Dar aulas" title="#Proffy" src="./.github/tela-2.PNG" width="400px">
 </p>
-
-## 🚀 Próximo passo
-
-- responsividade
-- acessibilidade
-- modo dark / light
-- variação de cores
-- hospedar
 
 ---- 
 
