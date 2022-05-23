@@ -311,5 +311,4 @@ O Next Level Week 2 é um evento de programação organizado pelo Rocketseat par
 
 ---- 
 
-.: Por [Douglas A B Novato - @douglasabnovato](https://linktr.ee/douglasabnovato)<br/>
-. De [Rocketseat - Next Level Week 2 - Discovery](https://nextlevelweek.com/inscricao/2)
+.: Por [Douglas A B Novato - @douglasabnovato](https://linktr.ee/douglasabnovato)
