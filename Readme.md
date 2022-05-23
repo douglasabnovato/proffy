@@ -290,8 +290,7 @@ O Next Level Week 2 é um evento de programação organizado pelo Rocketseat par
 - [ ] 3.2. acessibilidade
 - [ ] 3.3. modo dark / light
 - [ ] 3.4. variação de cores
-- [ ] 3.5. hospedar
-- [ ] 3.6. Fazer o deploy da Aplicação
+- [ ] 3.5. hospedar aplicação
 
 #### Resultado 
 
