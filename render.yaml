@@ -1,0 +1,21 @@
+# Blueprint do Render (plano gratuito): New > Blueprint > selecione este repositório
+# O SQLite fica em /tmp: o disco do plano gratuito é temporário e os dados voltam ao seed a cada reinício ou deploy
+services:
+  - type: web
+    name: proffy
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"
+      - key: DATABASE_FILE
+        value: /tmp/proffy.sqlite
+# fim de arquivo

@@ -1,0 +1,19 @@
+<div class="schedule-item">
+    <div class="select-block">
+        <label for="weekday-{{ i }}">Dia da semana</label>
+        <select id="weekday-{{ i }}" name="weekday[]" required>
+            <option value="">Selecione</option>
+            {% for weekday in weekdays %}
+                <option value="{{ loop.index0 }}" {{ "selected" if selectedDay == loop.index0 | string }}>{{ weekday }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="input-block">
+        <label for="time_from-{{ i }}">Das</label>
+        <input id="time_from-{{ i }}" type="time" name="time_from[]" value="{{ from }}" required>
+    </div>
+    <div class="input-block">
+        <label for="time_to-{{ i }}">Até</label>
+        <input id="time_to-{{ i }}" type="time" name="time_to[]" value="{{ to }}" required>
+    </div>
+</div>

@@ -1,41 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <meta name="theme-color" content="#8257e5">  
-    <title>Proffy</title>
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/png">
-    <link rel="stylesheet" href="/style/main.css">
+    {% include "_head.html" %}
+    <title>Proffy | Sua plataforma de estudos online</title>
     <link rel="stylesheet" href="/style/partials/page-landing.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 </head>
 <body id="page-landing">
     <div id="container">
-
         <div class="logo-container">
             <img src="/images/logo.svg" alt="Proffy">
-            <h2>Sua plataforma de estudos online</h2>
-        </div> 
-        
-        <img src="images/landing.svg" alt="Plataforma de Estudos" class="hero-image">
-
-        <div class="buttons-container">
-            <a class="study" href="/study">
-                <img src="/images/icons/study.svg" alt="Estudar">
-                Estudar
-            </a>
-            <a class="give-classes" href="/give-classes">
-                <img src="/images/icons/give-classes.svg" alt="Dar Aulas">
-                Dar Aulas
-            </a>
+            <h1>Sua plataforma de estudos online</h1>
         </div>
-
+        <img src="/images/landing.svg" alt="" class="hero-image">
+        <nav class="buttons-container" aria-label="Escolha como usar">
+            <a class="study" href="/study"><img src="/images/icons/study.svg" alt="">Estudar</a>
+            <a class="give-classes" href="/give-classes"><img src="/images/icons/give-classes.svg" alt="">Dar aulas</a>
+        </nav>
         <p class="total-connections">
-            Total de 200 conexões já realizadas
-            <img src="images/icons/purple-heart.svg" alt="Coração Roxo">
+            {% if stats.connections > 0 %}
+                Total de {{ stats.connections }} {{ "conexão realizada" if stats.connections == 1 else "conexões realizadas" }}
+            {% else %}
+                {{ stats.proffys }} {{ "professor cadastrado" if stats.proffys == 1 else "professores cadastrados" }}
+            {% endif %}
+            <img src="/images/icons/purple-heart.svg" alt="">
         </p>
-
     </div>
 </body>
 </html>

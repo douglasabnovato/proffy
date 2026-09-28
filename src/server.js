@@ -1,31 +1,16 @@
-//Servidor
-const express = require('express')
-const server = express()
+/* Ponto de entrada do Proffy */
+const config = require("./config");
+const { openDatabase } = require("./db/connection");
+const { createRepository } = require("./repository");
+const { createApp } = require("./app");
 
-const {
-    pageLanding,
-    pageStudy,
-    pageGiveClasses,
-    saveClasses
-} = require('./pages')
+/* Abre o banco e sobe o servidor */
+function main() {
+  const repo = createRepository(openDatabase(config.databaseFile));
+  createApp({ repo, trustProxy: config.trustProxy }).listen(config.port, () =>
+    console.log(`Proffy em http://localhost:${config.port}`)
+  );
+}
 
-//configurar nunjucks (template engine)
-const nunkjucks = require('nunjucks')
-nunkjucks.configure('src/views', {
-    express: server,
-    noCache: true,
-})
-
-//Início e Configuração do Servidor
-server
-//receber os dados do req.body
-.use(express.urlencoded({ extended: true }))
-//configurar arquivos estáticos (css, scripts, imagens)
-.use(express.static("public"))
-//rotas da aplicação
-.get("/", pageLanding)
-.get("/study", pageStudy)
-.get("/give-classes", pageGiveClasses)
-.post("/save-classes", saveClasses)
-//start do servidor
-.listen(5500)
+main();
+/* Fim de server.js */

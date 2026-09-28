@@ -35,7 +35,8 @@
     position: relative;
 }
 
-.page-header .header-content strong {
+.page-header .header-content strong,
+.page-header .header-content .header-title {
     font: 700 3.6rem Archivo;
     line-height: 8rem;
     color: var(--color-title-in-primary);
@@ -74,8 +75,10 @@
         justify-content: center;        
     }
 
-    .page-header .header-content strong {
+    .page-header .header-content strong,
+.page-header .header-content .header-title {
         max-width: 350px;
     }
     
 }
+.page-header .header-content h1.header-title { margin: 0; line-height: 1.25; max-width: 44rem; }

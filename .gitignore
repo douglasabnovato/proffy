@@ -1,2 +1,7 @@
 /arquivos
-/node_modules
+node_modules/
+data/
+*.sqlite-wal
+*.sqlite-shm
+.env
+src/database/database.sqlite
