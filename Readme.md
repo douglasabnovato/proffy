@@ -1,3 +1,5 @@
+> **Projeto de estudo.** Estado conferido em 30/10/2026: Detalhes em [docs/AVALIACAO.md](docs/AVALIACAO.md) e próximos passos em [docs/PLANO-ESTRATEGICO.md](docs/PLANO-ESTRATEGICO.md).
+
 ## Proffy
 
 ![Proffy](./.github/tela-2.PNG)
