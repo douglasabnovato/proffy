@@ -41,7 +41,7 @@ npm run dev     # http://localhost:5500
 npm test        # 8 testes
 ```
 
-Para migrar os dados antigos: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
+Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
 
 ### Em produção
 
