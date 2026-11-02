@@ -14,7 +14,7 @@
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Parcial: `error.html` existe; não exercitada no navegador. |
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não medido: Sem publicação verificada neste ciclo. |
 | 8 | Acessibilidade básica | axe e teclado | Atende: Depois da correção, axe sem violações em 3 telas e foco visível em todas as tabulações; sem rolagem em 375 px. |
-| 9 | Segurança e conformidade | Riscos decididos | Atende: `npm audit --omit=dev` sem alertas. `database.sqlite` segue versionado; não conferi o conteúdo. |
+| 9 | Segurança e conformidade | Riscos decididos | Atende: `npm audit --omit=dev` sem alertas. O banco com telefones saiu do Git em 02/11/2026, mas segue no histórico. |
 | 10 | Entrega confiável | CI verde antes de entrar na principal | Atende: CI verde no PR deste ciclo; a principal segue sem proteção. |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: Testes automatizados rodam no CI. |
 | 12 | Documentação honesta | O README ensina a rodar | Atende: Comandos conferidos com o `package.json`; aviso de estudo no README. |
