@@ -64,7 +64,7 @@ textarea {
 }
 /* Acessibilidade e estados (ciclo MVP) */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-:focus-visible { outline: 3px solid #32264D; outline-offset: 2px; }
+:focus-visible { outline: 3px solid #32264D !important; outline-offset: 2px; }
 .page-header :focus-visible { outline-color: #FFFFFF; }
 .field-error { min-height: 1.6rem; margin-top: .4rem; color: #B3261E; font-size: 1.4rem; font-weight: 600; }
 [aria-invalid="true"] { border: 2px solid #B3261E !important; }
