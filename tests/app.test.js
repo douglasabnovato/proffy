@@ -115,7 +115,7 @@ test("falhas mostram a página de erro: rota e aula inexistentes (404) e erro in
   const quiet = console.error;
   console.error = () => {};
   try {
-    const crash = await request(createApp({ repo: broken })).get("/study");
+    const crash = await request(createApp({ repo: broken })).get("/");
     assert.equal(crash.status, 500);
     assert.match(crash.text, /Algo deu errado/);
     assert.doesNotMatch(crash.text, /banco fora do ar/);
