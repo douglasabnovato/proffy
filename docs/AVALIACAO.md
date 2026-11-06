@@ -16,6 +16,8 @@ Falhas de instalação de módulos nativos podem ser próprias do Node 24 no Win
 |---|---|
 | https://proffy.onrender.com | responde |
 
+> **Correção de 06/11/2026:** o endereço responde, mas serve o Proffy de outra pessoa (outro tema, `scrollreveal`, caminhos que não existem neste repositório). O link saiu do README; decisão na #26.
+
 ## Limites
 
 O código e as telas não foram revisados um a um. Um endereço que responde não prova que a aplicação funciona, e um servidor gratuito pode estar dormindo.
