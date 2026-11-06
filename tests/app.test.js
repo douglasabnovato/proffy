@@ -101,3 +101,25 @@ test("migração corrige matéria em texto e descarta horários corrompidos", ()
   assert.equal(repo.search({ subject: 10, weekday: 6, minutes: 800 }).length, 0);
 });
 /* Fim de app.test.js */
+
+test("falhas mostram a página de erro: rota e aula inexistentes (404) e erro interno (500)", async () => {
+  const { app } = build();
+  const page = await request(app).get("/nao-existe");
+  assert.equal(page.status, 404);
+  assert.match(page.text, /Página não encontrada/);
+  assert.match(page.text, /Voltar ao início/);
+  const contact = await request(app).get("/contact/999");
+  assert.equal(contact.status, 404);
+  assert.match(contact.text, /Aula não encontrada/);
+  const broken = new Proxy({}, { get: () => () => { throw new Error("banco fora do ar"); } });
+  const quiet = console.error;
+  console.error = () => {};
+  try {
+    const crash = await request(createApp({ repo: broken })).get("/");
+    assert.equal(crash.status, 500);
+    assert.match(crash.text, /Algo deu errado/);
+    assert.doesNotMatch(crash.text, /banco fora do ar/);
+  } finally {
+    console.error = quiet;
+  }
+});
