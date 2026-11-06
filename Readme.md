@@ -38,17 +38,39 @@ Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:te
 ```sh
 npm install
 npm run dev     # http://localhost:5500
-npm test        # 8 testes
+npm test        # 9 testes
 ```
 
 Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
 
 ### Em produção
 
-- **URL:** https://proffy.onrender.com (Render, web service gratuito, blueprint `render.yaml`, deploy automático a cada push na `master`).
+- **Fora do ar.** Em 06/11/2026, `proffy.onrender.com` respondia 200, mas servia o projeto de outra pessoa, não este. O `render.yaml` precisa de outro nome de serviço; decisão na #26. Para ver o projeto, rode localmente (seção "Como rodar").
 - GitHub Pages não serve aqui: o projeto tem servidor Express e banco SQLite, e o Pages só publica arquivos estáticos.
 - O SQLite de produção fica em `/tmp/proffy.sqlite`: professores e conexões cadastrados **somem a cada reinício ou deploy** (o banco sobe vazio).
 - Passo a passo completo (inclui mover `ci/` para `.github/workflows/`): [docs/DEPLOY.md](docs/DEPLOY.md).
+
+## Estado e próximos passos (ciclo de 03/11/2026)
+
+Projeto de estudo (N1): 7 de 10 critérios aplicáveis atendidos. Ainda não finalizado.
+
+**O que foi feito**
+- Estado de estudo registrado e comando de testes corrigido (#14).
+- MVP de estudo com foco visível e `main` na inicial (#21).
+- Banco com dados pessoais fora do Git (#23).
+- Neste ciclo: CI também nos PRs para `developer/**`, código antigo removido, teste da página de erro e link de outro projeto retirado (#25).
+
+**O que queremos fazer**
+- #26 Decidir a publicação no Render com nome de serviço próprio (responsável).
+- #27 Proteger a `master` com PR e CI obrigatórios (responsável).
+- #28 Decidir o histórico com o banco de telefones (responsável).
+- #29 Percorrer cadastro, busca e contato na tela.
+- #30 Filtrar a busca por preço máximo.
+- #31 Buscar só pela matéria, com dia e horário opcionais.
+
+**Onde está a documentação**
+- Estado e critérios: [docs/MVP.md](docs/MVP.md)
+- Plano, pesquisa e backlog: [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md) (seção "Ciclo de 03/11/2026")
 
 ### Design
 
