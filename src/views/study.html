@@ -16,6 +16,7 @@
             </div>
             <div class="header-content">
                 <h1 class="header-title">Estes são os proffys disponíveis</h1>
+                <p id="search-hint" class="search-hint">Só a matéria é obrigatória. Dia e hora refinam a busca.</p>
                 <form id="search-teachers" method="get" action="/study">
                     <div class="select-block">
                         <label for="subject">Matéria</label>
@@ -27,7 +28,7 @@
                         </select>
                     </div>
                     <div class="select-block">
-                        <label for="weekday">Dia da semana (opcional)</label>
+                        <label for="weekday">Dia da semana</label>
                         <select name="weekday" id="weekday" aria-describedby="search-hint">
                             <option value="">Qualquer dia</option>
                             {% for weekday in weekdays %}
@@ -36,12 +37,11 @@
                         </select>
                     </div>
                     <div class="input-block">
-                        <label for="time">Hora (opcional)</label>
+                        <label for="time">Hora</label>
                         <input name="time" id="time" type="time" value="{{ filters.time }}" aria-describedby="search-hint">
                     </div>
                     <button type="submit">Filtrar</button>
                 </form>
-                <p id="search-hint" class="search-hint">Só a matéria é obrigatória. Dia e hora refinam a busca.</p>
             </div>
         </header>
         <main aria-live="polite">

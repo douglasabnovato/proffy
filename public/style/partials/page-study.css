@@ -218,6 +218,15 @@
         padding: 0 32px;
     }
 
+    .teacher-item .schedule-list {
+        padding: 1.6rem 32px 0;
+    }
+
+    /* main.css fixa h1 em 105px; o título quebrava uma palavra por linha */
+    #page-study .page-header .header-title {
+        width: auto;
+    }
+
     .teacher-item footer p strong{
         display: initial;
         margin-left: 16px;
