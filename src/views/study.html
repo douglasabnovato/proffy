@@ -16,6 +16,7 @@
             </div>
             <div class="header-content">
                 <h1 class="header-title">Estes são os proffys disponíveis</h1>
+                <p id="search-hint" class="search-hint">Só a matéria é obrigatória. Dia e hora refinam a busca.</p>
                 <form id="search-teachers" method="get" action="/study">
                     <div class="select-block">
                         <label for="subject">Matéria</label>
@@ -28,8 +29,8 @@
                     </div>
                     <div class="select-block">
                         <label for="weekday">Dia da semana</label>
-                        <select name="weekday" id="weekday" required>
-                            <option value="">Selecione</option>
+                        <select name="weekday" id="weekday" aria-describedby="search-hint">
+                            <option value="">Qualquer dia</option>
                             {% for weekday in weekdays %}
                                 <option value="{{ loop.index0 }}" {{ "selected" if filters.weekday == loop.index0 | string }}>{{ weekday }}</option>
                             {% endfor %}
@@ -37,7 +38,7 @@
                     </div>
                     <div class="input-block">
                         <label for="time">Hora</label>
-                        <input name="time" id="time" type="time" value="{{ filters.time }}" required>
+                        <input name="time" id="time" type="time" value="{{ filters.time }}" aria-describedby="search-hint">
                     </div>
                     <button type="submit">Filtrar</button>
                 </form>
@@ -45,7 +46,7 @@
         </header>
         <main aria-live="polite">
             {% if not searched %}
-                <p class="no-results">Escolha a matéria, o dia e a hora para ver os professores disponíveis.</p>
+                <p class="no-results">Escolha a matéria para ver os professores disponíveis. Dia e hora são opcionais.</p>
             {% elif proffys.length == 0 %}
                 <p class="no-results">Nenhum professor encontrado com a sua pesquisa. Tente outro dia ou horário.</p>
             {% else %}
@@ -60,6 +61,12 @@
                             </div>
                         </header>
                         <p class="bio">{{ proffy.bio }}</p>
+                        <h3 class="sr-only">Horários de {{ proffy.name }}</h3>
+                        <ul class="schedule-list">
+                            {% for s in proffy.schedules %}
+                                <li><strong>{{ s.day }}</strong> {{ s.from }} às {{ s.to }}</li>
+                            {% endfor %}
+                        </ul>
                         <footer>
                             <p>Preço/hora <strong>{{ proffy.cost_cents | brl }}</strong></p>
                             <a href="/contact/{{ proffy.class_id }}" class="button" target="_blank" rel="noopener noreferrer">
