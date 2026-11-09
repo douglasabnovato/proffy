@@ -36,13 +36,20 @@ function validateClass(body = {}) {
   return { value, errors };
 }
 
-/* Valida os filtros da busca; devolve null se incompletos */
+/* Campo opcional: vazio ou ausente vira null */
+function isBlank(value) {
+  return value === undefined || String(value).trim() === "";
+}
+
+/* Valida os filtros da busca: matéria obrigatória, dia e hora opcionais; devolve null se algo for inválido */
 function parseFilters(query = {}) {
   const subject = Number(query.subject);
-  const weekday = Number(query.weekday);
-  const minutes = toMinutes(query.time);
-  const complete = subject >= 1 && subject <= SUBJECTS.length && weekday >= 0 && weekday <= 6 && Number.isFinite(minutes);
-  return complete ? { subject, weekday, minutes } : null;
+  if (!(Number.isInteger(subject) && subject >= 1 && subject <= SUBJECTS.length)) return null;
+  const weekday = isBlank(query.weekday) ? null : Number(query.weekday);
+  if (weekday !== null && !(Number.isInteger(weekday) && weekday >= 0 && weekday <= 6)) return null;
+  const minutes = isBlank(query.time) ? null : toMinutes(query.time);
+  if (minutes !== null && !Number.isFinite(minutes)) return null;
+  return { subject, weekday, minutes };
 }
 
 module.exports = { validateClass, parseFilters };

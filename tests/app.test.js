@@ -50,6 +50,31 @@ test("busca respeita o intervalo [início, fim)", async () => {
   assert.match(edge.text, /Nenhum professor encontrado/);
 });
 
+test("busca só pela matéria lista o professor com todos os horários (#31)", async () => {
+  const { app } = build();
+  await request(app).post("/give-classes").type("form").send(form);
+  const res = await request(app).get("/study").query({ subject: 8, weekday: "", time: "" }).expect(200);
+  assert.match(res.text, /Ana Lima/);
+  assert.match(res.text, /Segunda-feira<\/strong> 08:30 às 12:00/);
+  assert.match(res.text, /Quarta-feira<\/strong> 14:00 às 18:00/);
+  const onlyDay = await request(app).get("/study").query({ subject: 8, weekday: 3 }).expect(200);
+  assert.match(onlyDay.text, /Ana Lima/);
+  const otherDay = await request(app).get("/study").query({ subject: 8, weekday: 5 }).expect(200);
+  assert.match(otherDay.text, /Nenhum professor encontrado/);
+  const otherSubject = await request(app).get("/study").query({ subject: 2 }).expect(200);
+  assert.match(otherSubject.text, /Nenhum professor encontrado/);
+});
+
+test("filtros inválidos não buscam: matéria, dia ou hora fora do formato (#31)", async () => {
+  const { app } = build();
+  await request(app).post("/give-classes").type("form").send(form);
+  for (const query of [{ subject: 99 }, { subject: "" }, { subject: 8, weekday: 9 }, { subject: 8, weekday: "1.5" }, { subject: 8, time: "25:00" }]) {
+    const res = await request(app).get("/study").query(query).expect(200);
+    assert.doesNotMatch(res.text, /Ana Lima/, JSON.stringify(query));
+    assert.match(res.text, /Escolha a matéria/, JSON.stringify(query));
+  }
+});
+
 test("filtro com tentativa de injeção SQL não quebra nem vaza dados", async () => {
   const { app } = build();
   await request(app).post("/give-classes").type("form").send(form);
