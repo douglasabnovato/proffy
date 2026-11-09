@@ -144,4 +144,4 @@ Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título
 3. Fluxo percorrido na tela e registrado (#29).
 4. `docs/MVP.md` com uma tabela só e histórico; README com o estado do ciclo.
 
-**Vira issue.** #33 (fluxo na tela no CI) e #34 (largura fixa no `main.css`). Seguem abertas #26, #27 e #28 (responsável) e #30.
+**Vira issue.** #33 (fluxo na tela no CI), #34 (largura fixa no `main.css`) e #36 (responsável: mesclar o ciclo, porque o merge foi negado à sessão do agente). Seguem abertas #26, #27 e #28 (responsável) e #30.

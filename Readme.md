@@ -65,6 +65,7 @@ Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**
 - #26 Decidir a publicação no Render com nome de serviço próprio (responsável).
 - #27 Proteger a `master` com PR e CI obrigatórios (responsável).
 - #28 Decidir o histórico com o banco de telefones (responsável).
+- #36 Mesclar o ciclo de 07/11 na `master` (responsável; o merge foi negado à sessão do agente).
 - #30 Filtrar a busca por preço máximo.
 - #33 Rodar no CI o fluxo na tela com Playwright e axe.
 - #34 Tirar a largura fixa de `h1`, `span` e `a` do `main.css`.
