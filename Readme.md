@@ -52,7 +52,7 @@ Para migrar dados de uma cópia local antiga do banco, que não está mais no Gi
 
 ## Estado e próximos passos (ciclo de 07/11/2026)
 
-Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**: os dois que faltam (#27 e #28) dependem do responsável.
+Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**: o que falta (#28) depende do responsável. A `master` está protegida desde 10/11/2026 (#27).
 
 **O que foi feito**
 - Estado de estudo registrado e comando de testes corrigido (#14).
@@ -63,7 +63,6 @@ Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**
 
 **O que queremos fazer**
 - #26 Decidir a publicação no Render com nome de serviço próprio (responsável).
-- #27 Proteger a `master` com PR e CI obrigatórios (responsável).
 - #28 Decidir o histórico com o banco de telefones (responsável).
 - #36 Mesclar o ciclo de 07/11 na `master` (responsável; o merge foi negado à sessão do agente).
 - #30 Filtrar a busca por preço máximo.
