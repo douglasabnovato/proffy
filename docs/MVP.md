@@ -2,12 +2,12 @@
 
 > Revisto em 07/11/2026 (ciclo de 07/11/2026, executado em 09/11/2026). Nível: **Estudo (N1)**. Os critérios 5 e 7 não se aplicam ao N1 e saem da conta. Testado no Windows, com Node 24.22.1, `better-sqlite3` 12 instalado sem gravar no lock (`npm ci --ignore-scripts && npm i --no-save better-sqlite3@12`). Não houve teste com pessoas nem em aparelho real.
 
-**Resumo:** 8 de 10 aplicáveis atendidos
+**Resumo:** 9 de 10 aplicáveis atendidos
 **Finalizado:** sim
 
-Os dois critérios que faltam dependem do responsável e têm issue com o rótulo `depende-do-responsavel`: 9 (#28) e 10 (#27).
+O critério que falta depende do responsável e tem issue com o rótulo `depende-do-responsavel`: 9 (#28). O 10 passou a "Atende" em 10/11/2026, com a `master` protegida (#27).
 
-## Critérios (07/11/2026)
+## Critérios (07/11/2026; critério 10 revisto em 10/11/2026)
 
 | # | Critério | Como verificar | Situação | Evidência e data |
 |---|---|---|---|---|
@@ -20,7 +20,7 @@ Os dois critérios que faltam dependem do responsável e têm issue com o rótul
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não se aplica (N1). O endereço `proffy.onrender.com` serve o projeto de outra pessoa. | #26 |
 | 8 | Acessibilidade básica | axe e teclado | Atende: axe (WCAG 2.1 AA) sem violações em início, "Dar aulas", sucesso e busca com resultado, nos modos claro e escuro, em 1280 e 375 px; foco com contorno em todas as tabulações da busca; sem rolagem horizontal em 375 px. | Playwright + `@axe-core/playwright`, 09/11/2026 |
 | 9 | Segurança e conformidade | Riscos decididos | Parcial: consultas parametrizadas, `helmet` e limite de escrita; o banco com telefones saiu do Git em 02/11, mas segue no histórico, à espera da decisão do responsável. | #28 |
-| 10 | Entrega confiável | CI verde antes de entrar na principal | Parcial: CI roda em PR e push para `master` e `developer/**`, mas a `master` não tem proteção. | #27 |
+| 10 | Entrega confiável | CI verde antes de entrar na principal | Atende: ruleset `principal-protegida` ativo na `master` (exige PR, bloqueia force push e exclusão); o workflow `CI` roda em PR e push para `master` e `developer/**`. | `gh api repos/douglasabnovato/proffy/rulesets`, 10/11/2026; #27 |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 11 testes (horários, busca com e sem dia e hora, filtros inválidos, injeção SQL, cadastro, contato, migração, páginas de erro). | `npm test`, 09/11/2026; CI do PR do ciclo |
 | 12 | Documentação honesta | O README ensina a rodar | Atende: comandos conferidos com o `package.json`; seção de estado e próximos passos com o ciclo de 07/11. | README, 09/11/2026 |
 
