@@ -148,7 +148,7 @@ Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título
 
 ## Ciclo de 15/11/2026
 
-> Executado em 15/11/2026. Branch `feature/2026-11-15` → `developer/sprint-2026-11-12` → `master`. O PR #37 (sprint → `master`) segue aberto para o responsável, e este ciclo entra nele. Nível: Estudo (N1), 10 critérios aplicáveis.
+> Executado em 15 e 16/11/2026. Branch `feature/2026-11-15` → `developer/sprint-2026-11-12` → `master`. O PR #37 (sprint → `master`) segue aberto para o responsável, e este ciclo entra nele. Nível: Estudo (N1), 10 critérios aplicáveis.
 
 ### Produto
 
