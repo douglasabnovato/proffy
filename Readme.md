@@ -41,7 +41,7 @@ npm ci
 npm run dev                      # http://localhost:5500
 npm test                         # 13 testes de unidade e integração
 npx playwright install chromium  # uma vez
-npm run test:e2e                 # 6 testes no navegador (claro e escuro), com axe
+npm run test:e2e                 # 3 testes no navegador (Chromium), com axe
 ```
 
 No Windows com Node 24, o `better-sqlite3` 11 não compila. Contorno sem mexer no lock: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12` (#41).
@@ -66,7 +66,7 @@ Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**
 - CI também nos PRs para `developer/**`, código antigo removido, teste da página de erro (#25).
 - Busca só pela matéria, com dia e hora opcionais e os horários no cartão; título da tela Estudar em uma linha (#35).
 - Critério 10 com a `master` protegida (#38).
-- Ciclo de 15/11: teste de tela com Playwright e axe no CI, nos modos claro e escuro; contraste do botão Estudar no celular; filtro por preço máximo; deploy preparado com nome de serviço próprio (#40).
+- Ciclo de 15/11: teste de tela com Playwright e axe no CI; contraste do botão Estudar no celular; filtro por preço máximo; deploy preparado com nome de serviço próprio (#40). O app não tem tema escuro próprio; o teste roda só no modo claro.
 
 **O que queremos fazer**
 - #36 Mesclar a sprint na `master` (responsável).

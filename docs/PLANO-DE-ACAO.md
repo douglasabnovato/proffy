@@ -167,7 +167,7 @@ Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título
 
 | Ideia | O que levamos para o projeto | Fonte |
 |---|---|---|
-| O `webServer` do Playwright sobe o servidor antes dos testes e espera uma URL responder | `playwright.config.js` sobe `npm start` com banco novo e espera `/health` | [Playwright: web server](https://playwright.dev/docs/test-webserver) |
+| O `webServer` do Playwright sobe o servidor antes dos testes e espera uma URL responder | `playwright.config.js` sobe `node src/server.js` com banco novo e espera `/health` | [Playwright: web server](https://playwright.dev/docs/test-webserver) |
 | O `AxeBuilder` com `withTags` restringe a análise às regras WCAG A e AA | Teste roda o axe com as tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` em cada tela | [Playwright: testes de acessibilidade](https://playwright.dev/docs/accessibility-testing) |
 | `colorScheme` emula o modo escuro do sistema por projeto | Dois projetos no config: claro e escuro | [Playwright: emulação](https://playwright.dev/docs/emulation) |
 | `page.route` corta pedidos de rede para fora | Fontes e avatar externos respondem localmente; o WhatsApp é checado pelo `Location`, sem sair para a internet | [Playwright: rede](https://playwright.dev/docs/network) |

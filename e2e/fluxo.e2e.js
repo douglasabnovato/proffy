@@ -65,20 +65,24 @@ test("cadastra com 2 horários, acha pela matéria, filtra por dia e hora e abre
   await page.getByLabel("Dia da semana").selectOption({ label: "Quarta-feira" });
   await page.getByLabel("Hora", { exact: true }).fill("15:00");
   await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/weekday=3&time=15%3A00/);
   await expect(cartao).toBeVisible();
 
   await page.getByLabel("Hora", { exact: true }).fill("18:00");
   await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/weekday=3&time=18%3A00/);
   await expect(page.getByText("Nenhum professor encontrado")).toBeVisible();
   await semViolacoes(page);
 
   await page.getByLabel("Hora", { exact: true }).fill("");
   await page.getByLabel("Até R$").fill("80,00");
   await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/max_cost=80%2C00/);
   await expect(page.getByText("Nenhum professor encontrado")).toBeVisible();
 
   await page.getByLabel("Até R$").fill("80,50");
   await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/max_cost=80%2C50/);
   await expect(cartao).toBeVisible();
   await semViolacoes(page);
   const contato = cartao.getByRole("link", { name: /Entrar em contato/ });
