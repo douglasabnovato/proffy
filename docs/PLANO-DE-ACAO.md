@@ -73,3 +73,149 @@ Timebox: 45 min.
 4. README sem o link de produção, que servia outro projeto; `docs/MVP.md` com régua N1 e critérios 9 e 10 em "Parcial".
 
 **Vira issue.** #26, #27 e #28 (responsável); #29, #30 e #31 (agente).
+
+## Ciclo de 07/11/2026
+
+> Executado em 09/11/2026. Branch `feature/2026-11-07` → `developer/sprint-2026-11-12` → `master` (o PR para a `master` fica aberto para o responsável). Nível: Estudo (N1), 10 critérios aplicáveis.
+
+### Produto
+
+**Problema e público.** Os mesmos do ciclo anterior: alunos procuram professor por matéria e horário; professores querem ser achados.
+
+**Hipótese e meta.** Achar um professor e abrir o contato em até 3 passos. Meta do ciclo: fluxo percorrido na tela (#29) e busca só pela matéria (#31).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| Filtros devem seguir o jeito como a pessoa decide (matéria, horário, orçamento), não a estrutura do banco | A matéria é o único filtro obrigatório; dia e hora refinam | [LowCode Agency: filtros em marketplaces](https://www.lowcode.agency/blog/search-filtering-system-design-for-marketplace-apps) |
+| Filtro opcional precisa de um padrão "qualquer" claro, para não esconder resultados | Opção "Qualquer dia" e frase explicando que dia e hora são opcionais | [Algolia: boas práticas de filtros](https://www.algolia.com/blog/ux/search-filter-ux-best-practices/) |
+| O teste de ponta a ponta sobe o servidor e navega por URL relativa | Roteiro local com Playwright contra `npm start`; levar ao CI virou issue | [Playwright: webServer](https://playwright.dev/docs/test-webserver) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Percorrer o fluxo na tela (critério 3) | Alto | Médio | Este ciclo (#29) |
+| 2 | Busca só pela matéria, com os horários no cartão | Médio | Baixo | Este ciclo (#31) |
+| 3 | Título da tela Estudar em uma linha | Baixo | Baixo | Este ciclo |
+| 4 | Fluxo na tela no CI | Médio | Médio | #33 |
+| 5 | Regra global de largura do `h1`, `span` e `a` | Baixo | Baixo | #34 |
+| 6 | Filtro por preço máximo | Médio | Baixo | #30 |
+| 7 | Publicação, proteção da `master` e histórico | Alto | Baixo | Responsável (#26, #27, #28) |
+
+**Fora do escopo.** Pagamento, agendamento, contas e avaliações.
+
+### Engenharia
+
+**Arquitetura.** Sem mudança: Express com Nunjucks, repositório SQL em `src/repository.js` sobre `better-sqlite3`, regras em `src/lib/validation.js`. A busca usa `@weekday IS NULL OR ...` e `@minutes IS NULL OR ...` com parâmetros, sem montar SQL por texto.
+
+**Riscos.**
+- O redirecionamento para `wa.me` sai para a internet no teste de tela; o Playwright não intercepta pedidos redirecionados.
+- `better-sqlite3` 11 não compila no Node 24 do Windows; o teste local usa a 12 sem gravar no lock.
+
+**Qualidade.** 11 testes com `node --test`; axe e teclado no roteiro de tela; CI em PR para `developer/**` e `master`.
+
+**Definição de pronto.** `npm test` verde local e no CI; fluxo percorrido na tela com registro; `docs/MVP.md` e README atualizados.
+
+### Fluxo percorrido na tela (#29)
+
+Ambiente: Windows 10, Node 24.22.1, `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12`, `PORT=5578 DATABASE_FILE=<banco novo> npm start`, Chromium 158 pelo Playwright 1.57, viewport 1280 × 900, modos claro e escuro. Data: 09/11/2026.
+
+| Passo | O que se fez | O que a tela mostrou |
+|---|---|---|
+| 1 | Abrir `/` | "0 professores cadastrados"; axe 0 |
+| 2 | "Dar aulas" e salvar vazio | 7 mensagens de erro nos campos; axe 0 |
+| 3 | Preencher nome, avatar, WhatsApp, biografia, Matemática, R$ 80,50, segunda 08:30–12:00 e, com "+ Novo horário", quarta 14:00–18:00 | "Cadastro concluído! Tudo certo: sua aula já aparece nas buscas dos alunos." |
+| 4 | "Ver aulas", só a matéria, "Filtrar" | Cartão com "Segunda-feira 08:30 às 12:00" e "Quarta-feira 14:00 às 18:00", preço R$ 80,50; axe 0 |
+| 5 | Quarta, 15:00 | O cartão aparece |
+| 6 | Quarta, 18:00 | "Nenhum professor encontrado" (fim do intervalo é exclusivo) |
+| 7 | "Entrar em contato" | Nova aba no WhatsApp com "Olá, Ana Teste! Tenho interesse na sua aula de Matemática." |
+| 8 | Voltar a `/` | "Total de 1 conexão realizada" |
+| 9 | Tab na busca; largura 375 px | Contorno de foco em todos os campos; sem rolagem horizontal em `/`, `/study` e `/give-classes` |
+
+Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título quebrava uma palavra por linha (`main.css` fixa `h1` em 105 px) e empurrava o formulário para fora do fundo roxo. Corrigido no commit `8c48062`; segunda passada sem violações.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Busca só pela matéria, com dia e hora opcionais e os horários no cartão (#31), com 2 testes novos.
+2. Título da tela Estudar em uma linha e dica dos filtros acima do formulário.
+3. Fluxo percorrido na tela e registrado (#29).
+4. `docs/MVP.md` com uma tabela só e histórico; README com o estado do ciclo.
+
+**Vira issue.** #33 (fluxo na tela no CI), #34 (largura fixa no `main.css`) e #36 (responsável: mesclar o ciclo, porque o merge foi negado à sessão do agente). Seguem abertas #26, #27 e #28 (responsável) e #30.
+
+## Ciclo de 15/11/2026
+
+> Executado em 15 e 16/11/2026. Branch `feature/2026-11-15` → `developer/sprint-2026-11-12` → `master`. O PR #37 (sprint → `master`) segue aberto para o responsável, e este ciclo entra nele. Nível: Estudo (N1), 10 critérios aplicáveis.
+
+### Produto
+
+**Problema e público.** Os mesmos: alunos procuram professor particular por matéria e horário; professores querem ser achados.
+
+**Hipótese e meta.** Acreditamos que buscar só pela matéria, com dia, hora e preço opcionais, deixa o aluno abrir o contato em até 3 passos. Saberemos quando o teste no navegador, no CI, fizer cadastro → busca → contato em 3 passos de tela e a inicial mostrar a conexão contada.
+
+**O que a análise achou.**
+- O critério 3 estava "Atende" com um roteiro local (`node proffy-fluxo.js`). A régua pede o teste no navegador passando no CI, e o critério 8 pede o axe dentro dele (comentário de 12/11 na #33). Os dois voltam a "Parcial" até o teste entrar no CI.
+- O ruleset `principal-protegida` está ativo, mas não exige o check `raiz` (`required_status_checks`), um dos critérios da #27.
+- `proffy.onrender.com` respondeu 200 em 15/11 com `theme-color` `#2E6D6E`: segue sendo o site de outra pessoa. O `render.yaml` ainda usa o nome `proffy`.
+- O `docs/DEPLOY.md` ainda manda mover `ci/` e fala em 8 testes; o README fala em 9. São 11.
+- `npm audit --omit=dev`: 0 vulnerabilidades. Dependabot: 0 alertas abertos. Dependências de produção já no patch e minor mais recentes da faixa; só sobram versões maiores (Express 5, `better-sqlite3` 12, `express-rate-limit` 8).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| O `webServer` do Playwright sobe o servidor antes dos testes e espera uma URL responder | `playwright.config.js` sobe `node src/server.js` com banco novo e espera `/health` | [Playwright: web server](https://playwright.dev/docs/test-webserver) |
+| O `AxeBuilder` com `withTags` restringe a análise às regras WCAG A e AA | Teste roda o axe com as tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` em cada tela | [Playwright: testes de acessibilidade](https://playwright.dev/docs/accessibility-testing) |
+| `colorScheme` emula o modo escuro do sistema por projeto | Dois projetos no config: claro e escuro | [Playwright: emulação](https://playwright.dev/docs/emulation) |
+| `page.route` corta pedidos de rede para fora | Fontes e avatar externos respondem localmente; o WhatsApp é checado pelo `Location`, sem sair para a internet | [Playwright: rede](https://playwright.dev/docs/network) |
+| `inputmode="decimal"` abre o teclado numérico com vírgula no celular | Campo "Até R$" da busca por preço (#30) | [MDN: inputmode](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode) |
+| No Render Free, o disco é temporário e o serviço dorme após 15 minutos sem acesso | `DEPLOY.md` avisa que o banco volta vazio; nome de serviço próprio no `render.yaml` | [Render: plano gratuito](https://render.com/docs/free), [Render: Blueprint](https://render.com/docs/blueprint-spec) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Honestidade: critérios 3 e 8 conforme a régua; README e `DEPLOY.md` com 11 testes | Alto | Baixo | Este ciclo |
+| 2 | Fluxo na tela no CI, com axe claro e escuro (#33) | Alto | Médio | Este ciclo |
+| 3 | Filtro por preço máximo (#30) | Médio | Baixo | Este ciclo |
+| 4 | `render.yaml` com nome próprio e `DEPLOY.md` refeito | Médio | Baixo | Este ciclo; criar o serviço é do responsável (#26) |
+| 5 | Largura fixa no `main.css` (#34) | Baixo | Baixo | Issue |
+| 6 | Versões maiores das dependências | Médio | Médio | Issue nova |
+| 7 | Check `raiz` obrigatório no ruleset | Médio | Baixo | Responsável (#27) |
+
+**Fora do escopo.** Pagamento, agendamento, contas e avaliações.
+
+### Engenharia
+
+**Arquitetura.** Sem mudança: Express com Nunjucks, repositório SQL em `src/repository.js` sobre `better-sqlite3`, regras em `src/lib/validation.js`. O preço máximo entra como mais um parâmetro opcional da mesma consulta (`@maxCents IS NULL OR c.cost_cents <= @maxCents`). O teste de tela fica em `e2e/`, separado do `node --test`.
+
+**Riscos.**
+- O limite de 5 envios por minuto por IP vale também no teste de tela; os dois projetos (claro e escuro) mandam 4 envios no total.
+- Os projetos claro e escuro dividem o banco: cada um cadastra um professor com nome próprio.
+- `better-sqlite3` 11 não compila no Node 24 do Windows; o teste local usa a 12 sem gravar no lock. O CI usa Node 22.
+
+**Qualidade.** `npm test` (unidade e integração) e `npm run test:e2e` (Playwright + axe) no CI, em jobs separados; teclado (foco visível) no teste de tela.
+
+**Definição de pronto.** Os dois jobs verdes no PR, sem `skipped`; `docs/MVP.md`, README e `DEPLOY.md` atualizados.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Segurança: `npm audit --omit=dev` e Dependabot conferidos (0 e 0).
+2. `docs/MVP.md`: critérios 3 e 8 em "Parcial" até o teste de tela rodar no CI.
+3. Teste de tela no CI com Playwright e axe (#33).
+4. Filtro por preço máximo, com testes (#30).
+5. `render.yaml` com nome próprio e `docs/DEPLOY.md` refeito.
+6. `docs/MVP.md`, README e issues.
+
+**Vira issue.** #34 segue; versões maiores das dependências; check obrigatório no ruleset (comentado na #27).
+
+### Resultado
+
+- `npm test`: 13 de 13 (2 novos para o preço máximo). `npm run test:e2e`: 6 passed (3 por modo). Os dois no CI, [run 43795292316](https://github.com/douglasabnovato/proffy/actions/runs/43795292316), 15/11/2026, sem `skipped`.
+- O axe no teste de tela achou um defeito que o roteiro local de 09/11 não pegou: o botão Estudar tinha contraste de 3,49 em 375 px (fonte de 15 px). Corrigido para 4,73 com `--color-primary`.
+- Critérios: 9 de 10 → 7 de 10 (3 e 8 revistos para "Parcial") → 9 de 10 com o job `e2e`.
+- Issues novas: #41 (versões maiores), #42 (fontes locais), #43 (semente de demonstração), #44 (ordenar por preço).

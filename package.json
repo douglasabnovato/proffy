@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "test": "node --test tests/app.test.js"
+    "test": "node --test tests/app.test.js",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=20"
@@ -20,6 +21,8 @@
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "~4.14.0",
+    "@playwright/test": "~1.64.1",
     "supertest": "^7.1.0"
   }
 }

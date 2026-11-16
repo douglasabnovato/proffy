@@ -59,12 +59,14 @@
     margin-right: 2rem;
 }
 
+/* Contorno branco: o fundo do botão é o mesmo da página; o branco dá 4,73:1 contra o roxo */
 .buttons-container a.study {
-    background: var(--color-primary-lighter);
+    background: var(--color-primary);
+    box-shadow: inset 0 0 0 .2rem #FFFFFF;
 }
 
 .buttons-container a.study:hover{
-    background: var(--color-primary-light);
+    background: var(--color-primary-dark);
 }
 
 .buttons-container a.give-classes {
