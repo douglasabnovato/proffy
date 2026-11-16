@@ -63,17 +63,24 @@ test("cadastra com 2 horários, acha pela matéria, filtra por dia e hora e abre
   await semViolacoes(page);
 
   await page.getByLabel("Dia da semana").selectOption({ label: "Quarta-feira" });
-  await page.getByLabel("Hora").fill("15:00");
+  await page.getByLabel("Hora", { exact: true }).fill("15:00");
   await page.getByRole("button", { name: "Filtrar" }).click();
   await expect(cartao).toBeVisible();
 
-  await page.getByLabel("Hora").fill("18:00");
+  await page.getByLabel("Hora", { exact: true }).fill("18:00");
   await page.getByRole("button", { name: "Filtrar" }).click();
   await expect(page.getByText("Nenhum professor encontrado")).toBeVisible();
   await semViolacoes(page);
 
-  await page.getByLabel("Hora").fill("");
+  await page.getByLabel("Hora", { exact: true }).fill("");
+  await page.getByLabel("Até R$").fill("80,00");
   await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page.getByText("Nenhum professor encontrado")).toBeVisible();
+
+  await page.getByLabel("Até R$").fill("80,50");
+  await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(cartao).toBeVisible();
+  await semViolacoes(page);
   const contato = cartao.getByRole("link", { name: /Entrar em contato/ });
   await expect(contato).toHaveAttribute("target", "_blank");
   const href = await contato.getAttribute("href");
@@ -90,7 +97,7 @@ test("cadastra com 2 horários, acha pela matéria, filtra por dia e hora e abre
 
 test("Tab na busca mostra o contorno de foco em cada campo", async ({ page }) => {
   await page.goto("/study");
-  for (const id of ["subject", "weekday", "time"]) {
+  for (const id of ["subject", "weekday", "time", "max_cost"]) {
     await page.locator(`#${id}`).focus();
     await page.keyboard.press("Shift+Tab");
     await page.keyboard.press("Tab");

@@ -6,6 +6,7 @@ const { openDatabase } = require("../src/db/connection");
 const { createRepository } = require("../src/repository");
 const { createApp } = require("../src/app");
 const { toMinutes } = require("../src/domain/catalog");
+const { parseMaxCents } = require("../src/lib/validation");
 
 /* App isolado com banco em memória */
 function build() {
@@ -125,7 +126,6 @@ test("migração corrige matéria em texto e descarta horários corrompidos", ()
   assert.equal(repo.search({ subject: 10, weekday: 1, minutes: 800 }).length, 1);
   assert.equal(repo.search({ subject: 10, weekday: 6, minutes: 800 }).length, 0);
 });
-/* Fim de app.test.js */
 
 test("falhas mostram a página de erro: rota e aula inexistentes (404) e erro interno (500)", async () => {
   const { app } = build();
@@ -148,3 +148,29 @@ test("falhas mostram a página de erro: rota e aula inexistentes (404) e erro in
     console.error = quiet;
   }
 });
+
+test("preço máximo aceita reais com vírgula ou ponto e ignora valor inválido (#30)", () => {
+  assert.equal(parseMaxCents("80,50"), 8050);
+  assert.equal(parseMaxCents("80.5"), 8050);
+  assert.equal(parseMaxCents(" 100 "), 10000);
+  for (const value of [undefined, "", "abc", "-10", "0", "80,555", "1e3", "999999"]) {
+    assert.equal(parseMaxCents(value), null, String(value));
+  }
+});
+
+test("busca por preço máximo: acima some, igual e abaixo aparecem, inválido é ignorado (#30)", async () => {
+  const { app } = build();
+  await request(app).post("/give-classes").type("form").send(form);
+  const below = await request(app).get("/study").query({ subject: 8, max_cost: "80,49" }).expect(200);
+  assert.match(below.text, /Nenhum professor encontrado/);
+  const equal = await request(app).get("/study").query({ subject: 8, max_cost: "80,50" }).expect(200);
+  assert.match(equal.text, /Ana Lima/);
+  const above = await request(app).get("/study").query({ subject: 8, max_cost: "100" }).expect(200);
+  assert.match(above.text, /Ana Lima/);
+  assert.match(above.text, /value="100"/);
+  const invalid = await request(app).get("/study").query({ subject: 8, max_cost: "barato" }).expect(200);
+  assert.match(invalid.text, /Ana Lima/);
+  const blank = await request(app).get("/study").query({ subject: 8, max_cost: "" }).expect(200);
+  assert.match(blank.text, /Ana Lima/);
+});
+/* Fim de app.test.js */

@@ -10,6 +10,7 @@ function createRepository(db) {
     SELECT c.id AS class_id, c.subject, c.cost_cents, p.name, p.avatar, p.whatsapp, p.bio
     FROM classes c JOIN proffys p ON p.id = c.proffy_id
     WHERE c.subject = @subject
+      AND (@maxCents IS NULL OR c.cost_cents <= @maxCents)
       AND EXISTS (SELECT 1 FROM class_schedule s WHERE s.class_id = c.id
                   AND (@weekday IS NULL OR s.weekday = @weekday)
                   AND (@minutes IS NULL OR (s.time_from <= @minutes AND s.time_to > @minutes)))
@@ -28,9 +29,9 @@ function createRepository(db) {
       schedules.forEach((s) => insertSchedule.run({ ...s, classId }));
       return classId;
     }),
-    /* Busca por matéria; dia e hora são opcionais (null = qualquer) */
-    search: ({ subject, weekday = null, minutes = null }) =>
-      search.all({ subject, weekday, minutes }).map((row) => ({
+    /* Busca por matéria; dia, hora e preço máximo são opcionais (null = qualquer) */
+    search: ({ subject, weekday = null, minutes = null, maxCents = null }) =>
+      search.all({ subject, weekday, minutes, maxCents }).map((row) => ({
         ...row,
         subjectName: subjectName(row.subject),
         schedules: schedulesOf.all(row.class_id).map((s) => ({

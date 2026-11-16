@@ -16,7 +16,7 @@
             </div>
             <div class="header-content">
                 <h1 class="header-title">Estes são os proffys disponíveis</h1>
-                <p id="search-hint" class="search-hint">Só a matéria é obrigatória. Dia e hora refinam a busca.</p>
+                <p id="search-hint" class="search-hint">Só a matéria é obrigatória. Dia, hora e preço refinam a busca.</p>
                 <form id="search-teachers" method="get" action="/study">
                     <div class="select-block">
                         <label for="subject">Matéria</label>
@@ -40,15 +40,19 @@
                         <label for="time">Hora</label>
                         <input name="time" id="time" type="time" value="{{ filters.time }}" aria-describedby="search-hint">
                     </div>
+                    <div class="input-block">
+                        <label for="max_cost">Até R$ <span class="sr-only">por hora/aula</span></label>
+                        <input name="max_cost" id="max_cost" type="text" inputmode="decimal" placeholder="80,00" value="{{ filters.max_cost }}" aria-describedby="search-hint">
+                    </div>
                     <button type="submit">Filtrar</button>
                 </form>
             </div>
         </header>
         <main aria-live="polite">
             {% if not searched %}
-                <p class="no-results">Escolha a matéria para ver os professores disponíveis. Dia e hora são opcionais.</p>
+                <p class="no-results">Escolha a matéria para ver os professores disponíveis. Dia, hora e preço são opcionais.</p>
             {% elif proffys.length == 0 %}
-                <p class="no-results">Nenhum professor encontrado com a sua pesquisa. Tente outro dia ou horário.</p>
+                <p class="no-results">Nenhum professor encontrado com a sua pesquisa. Tente outro dia, horário ou preço.</p>
             {% else %}
                 <p class="sr-only">{{ proffys.length }} professores encontrados.</p>
                 {% for proffy in proffys %}
