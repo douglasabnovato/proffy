@@ -57,7 +57,7 @@ Para migrar dados de uma cópia local antiga do banco, que não está mais no Gi
 
 ## Estado e próximos passos (ciclo de 15/11/2026)
 
-Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**: sim; o que falta (critério 9, #28, e critério 10, #27) depende do responsável. Os ciclos de 07/11 e de 15/11 já estão na `master`: o PR #37 (sprint de 12/11 → `master`) foi mesclado em 16/11/2026. O que vem depois entra pela `developer/sprint-2026-11-19`, cujo PR para a `master` (#47) espera a revisão do responsável.
+Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**: sim; o que falta (critério 9, #28, e critério 10, #27) depende do responsável. Os ciclos de 07/11 e de 15/11 já estão na `master`: o PR #37 (sprint de 12/11 → `master`) foi mesclado em 16/11/2026. O que vem depois entra pela `developer/sprint-2026-11-19`, cujo PR para a `master` espera a revisão do responsável. Os alertas do Dependabot estão ligados, com 0 abertos em 16/11/2026; o critério 9 segue Parcial só pelo banco no histórico (#28).
 
 **O que foi feito**
 - Estado de estudo registrado e comando de testes corrigido (#14).
