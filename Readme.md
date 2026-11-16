@@ -1,4 +1,4 @@
-> **Projeto de estudo (N1).** Estado conferido em 15/11/2026: 9 de 10 critérios aplicáveis atendidos. Detalhes em [docs/MVP.md](docs/MVP.md); avaliação inicial de 30/10/2026 em [docs/AVALIACAO.md](docs/AVALIACAO.md).
+> **Projeto de estudo (N1).** Estado conferido em 16/11/2026: 8 de 10 critérios aplicáveis atendidos. Detalhes em [docs/MVP.md](docs/MVP.md); avaliação inicial de 30/10/2026 em [docs/AVALIACAO.md](docs/AVALIACAO.md).
 
 ## 🧠 O que aprendi
 
@@ -57,7 +57,7 @@ Para migrar dados de uma cópia local antiga do banco, que não está mais no Gi
 
 ## Estado e próximos passos (ciclo de 15/11/2026)
 
-Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**: o que falta (critério 9, #28) depende do responsável. O ciclo de 07/11 e o de 15/11 esperam o merge da sprint na `master` (PR #37).
+Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**: sim; o que falta (critério 9, #28, e critério 10, #27) depende do responsável. O ciclo de 07/11 e o de 15/11 esperam o merge da sprint na `master` (PR #37).
 
 **O que foi feito**
 - Estado de estudo registrado e comando de testes corrigido (#14).
