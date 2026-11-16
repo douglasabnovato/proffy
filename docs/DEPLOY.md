@@ -46,7 +46,7 @@ O Proffy não usa MongoDB: o banco é SQLite (`better-sqlite3`) num arquivo. Nã
 1. `git clone -c core.longpaths=true https://github.com/douglasabnovato/proffy && cd proffy`
 2. `npm ci` (no Windows com Node 24, o `better-sqlite3` 11 não compila: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12`)
 3. `npm test`: 13 testes passando.
-4. `npx playwright install chromium` e `npm run test:e2e`: 6 testes passando (claro e escuro).
+4. `npx playwright install chromium` e `npm run test:e2e`: 3 testes passando. O app não tem tema escuro próprio, então o teste roda só no modo claro.
 5. Simular produção: `PORT=5500 NODE_ENV=production TRUST_PROXY=1 DATABASE_FILE=./data/producao-local.sqlite npm start` e abrir `http://localhost:5500/health`. Esperado: `{"status":"ok","connections":0,"proffys":0}`. `Ctrl+C` para sair.
 
 ### Etapa 2 · Criar o serviço no Render

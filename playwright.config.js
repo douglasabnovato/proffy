@@ -1,4 +1,4 @@
-/* Teste de ponta a ponta no navegador: sobe o Proffy com um banco SQLite novo e percorre o fluxo nos modos claro e escuro */
+/* Teste de ponta a ponta no navegador: sobe o Proffy com um banco SQLite novo e percorre o fluxo no Chromium. O app não tem tema escuro próprio (nenhum CSS usa prefers-color-scheme), então há um projeto só */
 const os = require("os");
 const path = require("path");
 const { defineConfig, devices } = require("@playwright/test");
@@ -18,7 +18,6 @@ module.exports = defineConfig({
   use: { baseURL: `http://localhost:${PORT}`, trace: "retain-on-failure", reducedMotion: "reduce" },
   projects: [
     { name: "claro", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 }, colorScheme: "light" } },
-    { name: "escuro", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 }, colorScheme: "dark" } },
   ],
   webServer: {
     command: "node src/server.js",
