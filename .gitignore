@@ -5,3 +5,5 @@ data/
 *.sqlite-shm
 .env
 src/database/database.sqlite
+test-results/
+playwright-report/
