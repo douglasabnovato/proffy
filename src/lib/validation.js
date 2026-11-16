@@ -41,7 +41,16 @@ function isBlank(value) {
   return value === undefined || String(value).trim() === "";
 }
 
-/* Valida os filtros da busca: matéria obrigatória, dia e hora opcionais; devolve null se algo for inválido */
+/* Preço máximo opcional em reais ("80,50" ou "80.50"); vazio, inválido ou fora da faixa vira null e é ignorado (#30) */
+function parseMaxCents(value) {
+  if (isBlank(value)) return null;
+  const text = String(value).trim();
+  if (!/^\d{1,5}([.,]\d{1,2})?$/.test(text)) return null;
+  const cents = Math.round(Number(text.replace(",", ".")) * 100);
+  return cents > 0 ? cents : null;
+}
+
+/* Valida os filtros da busca: matéria obrigatória; dia, hora e preço máximo opcionais; devolve null se matéria, dia ou hora forem inválidos */
 function parseFilters(query = {}) {
   const subject = Number(query.subject);
   if (!(Number.isInteger(subject) && subject >= 1 && subject <= SUBJECTS.length)) return null;
@@ -49,8 +58,8 @@ function parseFilters(query = {}) {
   if (weekday !== null && !(Number.isInteger(weekday) && weekday >= 0 && weekday <= 6)) return null;
   const minutes = isBlank(query.time) ? null : toMinutes(query.time);
   if (minutes !== null && !Number.isFinite(minutes)) return null;
-  return { subject, weekday, minutes };
+  return { subject, weekday, minutes, maxCents: parseMaxCents(query.max_cost) };
 }
 
-module.exports = { validateClass, parseFilters };
+module.exports = { validateClass, parseFilters, parseMaxCents };
 /* Fim de validation.js */

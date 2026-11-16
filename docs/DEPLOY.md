@@ -1,92 +1,86 @@
 # Deploy · Proffy
 
-Plano de ação para publicar a plataforma que conecta alunos a professores particulares em hospedagem gratuita.
+> Revisto em 15/11/2026. **Estado: não publicado.** O serviço no Render ainda não foi criado; criar é do responsável (#26). O endereço `https://proffy.onrender.com` responde, mas serve o projeto de outra pessoa (`theme-color` `#2E6D6E`, conferido com `curl` em 15/11/2026). Por isso o `render.yaml` usa o nome `proffy-estudo`.
 
-## 1. Desafio
-
-Colocar no ar, sem custo, uma aplicação Express + Nunjucks + SQLite (better-sqlite3) em que professores publicam nome, foto, biografia, WhatsApp, preço e horários, e alunos filtram por matéria, dia e hora. O cadastro é público, então a publicação precisa manter o limite de envios por IP, o aviso de que os dados ficam visíveis e deixar claro que o banco do plano gratuito é temporário.
-
-## 2. Conteúdo
-
-### Decisão de hospedagem
+## 1. Decisão de hospedagem
 
 | Opção | Resultado |
 |---|---|
-| **Render, 1 web service gratuito (escolhida)** | Roda o servidor Express; blueprint `render.yaml` já no repositório; deploy automático a cada push |
-| GitHub Pages | Não serve: só publica arquivos estáticos, e o projeto precisa de servidor Express e banco |
-| Netlify/Vercel | Não executam um servidor Express contínuo com SQLite em disco |
+| **Render, 1 web service Free (escolhida)** | Roda o servidor Express; o Blueprint `render.yaml` já está no repositório; publica a cada push na `master` |
+| GitHub Pages | Não serve: só publica arquivos estáticos, e o projeto tem servidor Express e banco |
+| Netlify ou Vercel | Não mantêm um servidor Express contínuo com SQLite em disco |
 | VPS ou disco persistente pago | Fora da regra do portfólio (só hospedagem gratuita) |
 
-### O que foi ajustado para produção
+O Proffy não usa MongoDB: o banco é SQLite (`better-sqlite3`) num arquivo. Não há usuário de banco nem segredo a criar.
 
-| Mudança | Arquivo | Por quê |
+## 2. O que o `render.yaml` faz
+
+| Chave | Valor | Por quê |
 |---|---|---|
-| `NODE_VERSION` `22` | `render.yaml` | O Node 20 saiu de suporte em abr/2026 |
-| `autoDeployTrigger: commit` | `render.yaml` | Cada push na `master` publica sozinho |
-| `NODE_ENV=production` | `render.yaml` | O `npm ci` deixa de instalar dependências de teste |
-| `DATABASE_FILE=/tmp/proffy.sqlite` | `render.yaml` | Caminho gravável e explícito para o SQLite no Render |
-| `TRUST_PROXY=1` (já existia) | `render.yaml` | Sem isso o limite de 5 cadastros/min contaria todos os visitantes como um só IP (o do proxy do Render) |
-| CI com Node 22 | `ci/github-actions-ci.yml` → mover para `.github/workflows/ci.yml` | Testes e `npm audit` a cada push, na mesma versão da produção |
-| `src/database/database.sqlite` no `.gitignore` | `.gitignore` | Depois do `git rm --cached`, o `git add -A` não volta a versionar o banco |
-| Seção "Em produção" | `Readme.md` | URL, hospedagem e aviso de dados temporários |
+| `name` | `proffy-estudo` | O nome `proffy` já é de outra conta |
+| `plan` | `free` | Só ambiente gratuito |
+| `buildCommand` / `startCommand` | `npm ci` / `npm start` | Os mesmos do `package.json` |
+| `healthCheckPath` | `/health` | Lê o banco: devolve `{"status":"ok","connections":N,"proffys":N}` |
+| `autoDeployTrigger` | `commit` | Cada push na `master` publica |
+| `NODE_VERSION` | `22` | A mesma versão do CI |
+| `NODE_ENV` | `production` | O `npm ci` não instala Playwright nem supertest |
+| `TRUST_PROXY` | `1` | Sem isso, o limite de 5 envios por minuto contaria todos os visitantes como um IP só (o do proxy) |
+| `DATABASE_FILE` | `/tmp/proffy.sqlite` | Caminho gravável no Render |
 
-### Limitações do plano gratuito
+## 3. Limites do plano gratuito
 
-- **Os dados somem a cada reinício ou deploy**: o disco do Render Free é temporário. O banco de produção **sobe vazio** (sem professores nem conexões) sempre que o serviço reinicia, dorme e acorda em outra máquina, ou recebe um novo deploy. Quem abrir o link vai ver a busca sem resultados até alguém cadastrar uma aula. Para persistir, o caminho gratuito seria PostgreSQL (Neon), o que é mudança de arquitetura (decisão pendente).
-- O serviço dorme após 15 min sem acesso e leva cerca de 1 min para acordar.
-- As 750 horas gratuitas por mês são da conta inteira do Render, somando todos os serviços.
+- **O banco volta vazio** a cada deploy, reinício ou quando o serviço dorme: o disco do Render Free é temporário ([Render: plano gratuito](https://render.com/docs/free)).
+- O serviço dorme depois de 15 minutos sem acesso e leva cerca de 1 minuto para acordar.
+- As horas gratuitas são da conta inteira do Render.
 
-### Pontos de atenção (segurança e LGPD)
+## 4. Segurança e dados pessoais
 
-- O cadastro publica **nome, foto, biografia e WhatsApp** de quem se cadastra. O formulário já avisa ("ficarão visíveis para alunos que buscarem aulas"). Numa demonstração pública, cadastre apenas dados fictícios e não peça a terceiros que usem o site com dados reais.
-- Não há login nem forma de o professor apagar o próprio cadastro: em um uso real, isso seria exigido pela LGPD (direito de eliminação). Na versão gratuita, o reinício do serviço apaga tudo, mas isso não substitui a funcionalidade (decisão pendente).
-- Limite de 5 cadastros por minuto por IP, conteúdo escapado e foto só por link `https://`.
-- `src/database/database.sqlite` tem dados de teste antigos: não versione bancos (objetivo do `git rm --cached`).
+- O cadastro publica nome, foto, biografia e WhatsApp. O formulário avisa. Numa demonstração, use só dados fictícios (ex.: "Ana Teste", WhatsApp `11900000001`, foto `https://imagens.empresa.test/ana.png`).
+- Não há login nem como o professor apagar o próprio cadastro. O reinício do serviço apaga tudo, mas isso não substitui o direito de eliminação da LGPD num uso real.
+- Limite de 5 envios por minuto por IP, HTML escapado, foto só por link `https://`, consultas parametrizadas e `helmet` com CSP.
 
-## 3. Solução (passo a passo)
+## 5. Passo a passo (responsável)
 
-Branch principal: **`master`**.
+### Etapa 1 · Conferir localmente (Git Bash)
 
-### Etapa 1 · Validar localmente (Git Bash)
+1. `git clone -c core.longpaths=true https://github.com/douglasabnovato/proffy && cd proffy`
+2. `npm ci` (no Windows com Node 24, o `better-sqlite3` 11 não compila: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12`)
+3. `npm test`: 13 testes passando.
+4. `npx playwright install chromium` e `npm run test:e2e`: 6 testes passando (claro e escuro).
+5. Simular produção: `PORT=5500 NODE_ENV=production TRUST_PROXY=1 DATABASE_FILE=./data/producao-local.sqlite npm start` e abrir `http://localhost:5500/health`. Esperado: `{"status":"ok","connections":0,"proffys":0}`. `Ctrl+C` para sair.
 
-1. `cd /c/ambiente-projeto/ser-mvp/proffy`
-2. Apagar os arquivos substituídos (saem do Git e do disco):
-   `git rm src/pages.js src/utils/format.js src/database/createProffy.js src/database/db.js src/database/fake.data.js src/database/test.js`
-3. Opcional, recomendado: parar de versionar o banco antigo (o arquivo continua no seu disco):
-   `git rm --cached src/database/database.sqlite`
-4. `npm install`
-5. `npm test` (esperado: 8 testes passando)
-6. Opcional, para migrar os dados antigos: `DATABASE_FILE=./src/database/database.sqlite npm start` uma vez, depois `Ctrl+C` (horários corrompidos pelo bug antigo são descartados).
-7. Simular produção: `PORT=5500 NODE_ENV=production TRUST_PROXY=1 DATABASE_FILE=./data/producao-local.sqlite npm start` (no Render o banco fica em `/tmp`; aqui vai para `data/`, que o Git ignora) e abrir `http://localhost:5500/health` (esperado: `{"status":"ok","connections":0,"proffys":0}`). `Ctrl+C` para sair.
+### Etapa 2 · Criar o serviço no Render
 
-### Etapa 2 · Subir para o GitHub
+1. Entrar em <https://dashboard.render.com> com a conta do GitHub.
+2. Botão **New** (alto da tela) → **Blueprint**.
+3. Em **Connect a repository**, escolher `douglasabnovato/proffy`. Se não aparecer, clicar em **Configure account** e liberar o repositório para o Render.
+4. **Branch:** `master`. **Blueprint Name:** `proffy`.
+5. Conferir na lista o serviço `proffy-estudo`, tipo **Web Service**, plano **Free**. Nenhuma variável pede valor: o Blueprint não tem segredo.
+6. Clicar em **Deploy Blueprint** (ou **Apply**) e abrir o serviço → **Logs**. Esperar a linha `Proffy em http://localhost:10000` (3 a 6 minutos; o `better-sqlite3` compila na primeira vez).
 
-1. Ativar o CI (a pasta `.github` é protegida para a ferramenta que preparou o projeto, então o arquivo veio em `ci/`):
-   `mkdir -p .github/workflows && mv ci/github-actions-ci.yml .github/workflows/ci.yml && rmdir ci`
-2. `git status` (não podem aparecer `node_modules/`, `data/`, `.env` nem `src/database/database.sqlite` como arquivo novo)
-3. `git add -A`
-4. `git commit -m "feat(deploy): Node 22, SQLite em /tmp, deploy automático no Render e CI"`
-5. `git push origin master`
-6. No GitHub, aba **Actions**: o CI precisa ficar verde.
+### Etapa 3 · Conferir o endereço real
 
-### Etapa 3 · Criar o serviço no Render
+1. No topo da página do serviço, copiar o endereço `https://proffy-estudo....onrender.com`. O Render pode acrescentar um sufixo se o nome já existir.
+2. `curl -s https://<endereço>/health`: esperado `{"status":"ok","connections":0,"proffys":0}`.
+3. `curl -s https://<endereço>/ | grep theme-color`: esperado `#8257e5`, o do `src/views/_head.html`. Outro valor indica que o site não é o nosso.
 
-1. Entrar em **render.com** com a conta do GitHub e autorizar o repositório `proffy`.
-2. **New → Blueprint** e escolher `douglasabnovato/proffy` (branch `master`).
-3. Conferir o serviço `proffy`, plano **Free**, e as variáveis já preenchidas pelo blueprint: `NODE_VERSION=22`, `NODE_ENV=production`, `TRUST_PROXY=1`, `DATABASE_FILE=/tmp/proffy.sqlite`. Nenhum segredo é pedido.
-4. **Apply** e acompanhar **Logs** até aparecer `Proffy em http://localhost:10000` (3 a 6 min; o `better-sqlite3` compila na primeira vez).
+### Etapa 4 · Conferir o fluxo no ar
 
-### Etapa 4 · Conferir no ar
-
-1. `https://proffy.onrender.com/health` responde `{"status":"ok","connections":0,"proffys":0}`.
-2. A home carrega com a ilustração e o total de conexões.
-3. Em **Dar aulas**, cadastrar um professor **fictício** com 2 horários redireciona para a página de sucesso; `/health` passa a `proffys: 1`.
-4. Em **Estudar**, filtrar pela matéria, dia e um horário dentro do intervalo mostra o professor; um horário igual ao fim do intervalo não mostra.
-5. **Entrar em contato** abre o WhatsApp com a mensagem pronta e `/health` soma 1 em `connections`.
-6. Uma URL inexistente (ex.: `/xyz`) mostra a página 404 própria.
-7. Em **Manual Deploy → Restart service**, `/health` volta a zero (confirma o comportamento de disco temporário).
+1. **Dar aulas**: cadastrar um professor fictício com 2 horários; a tela mostra "Cadastro concluído!" e `/health` passa a `proffys: 1`.
+2. **Estudar**: só a matéria mostra o cartão com os 2 horários; quarta 15:00 acha, quarta 18:00 não acha; "Até R$" abaixo do preço não acha.
+3. **Entrar em contato** abre o WhatsApp com a mensagem pronta, e `/health` soma 1 em `connections`.
+4. `/xyz` mostra a página 404 própria.
 
 ### Etapa 5 · Fechar
 
-1. Se a URL real for diferente de `https://proffy.onrender.com`, corrigir no `Readme.md`, commit e push (o Render publica sozinho).
-2. No GitHub, **About → Website**: colar a URL.
+1. Comentar na #26 o endereço real e a saída do `curl` de `/health`.
+2. Pedir num PR o link no README (seção "Em produção") e em **About → Website** no GitHub (engrenagem ao lado de "About").
+
+## 6. Se algo falhar
+
+| Sintoma | Causa provável | O que fazer |
+|---|---|---|
+| Build falha em `better-sqlite3` | Node diferente do 22 | Conferir `NODE_VERSION=22` em **Environment** |
+| `/health` dá 502 por 1 minuto | Serviço acordando | Esperar e repetir |
+| Professores somem | Disco temporário do plano Free | Comportamento esperado; banco persistente é outra decisão |
+| Cadastro dá 429 | Limite de 5 envios por minuto por IP | Esperar 1 minuto |

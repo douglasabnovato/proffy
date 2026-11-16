@@ -145,3 +145,77 @@ Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título
 4. `docs/MVP.md` com uma tabela só e histórico; README com o estado do ciclo.
 
 **Vira issue.** #33 (fluxo na tela no CI), #34 (largura fixa no `main.css`) e #36 (responsável: mesclar o ciclo, porque o merge foi negado à sessão do agente). Seguem abertas #26, #27 e #28 (responsável) e #30.
+
+## Ciclo de 15/11/2026
+
+> Executado em 15 e 16/11/2026. Branch `feature/2026-11-15` → `developer/sprint-2026-11-12` → `master`. O PR #37 (sprint → `master`) segue aberto para o responsável, e este ciclo entra nele. Nível: Estudo (N1), 10 critérios aplicáveis.
+
+### Produto
+
+**Problema e público.** Os mesmos: alunos procuram professor particular por matéria e horário; professores querem ser achados.
+
+**Hipótese e meta.** Acreditamos que buscar só pela matéria, com dia, hora e preço opcionais, deixa o aluno abrir o contato em até 3 passos. Saberemos quando o teste no navegador, no CI, fizer cadastro → busca → contato em 3 passos de tela e a inicial mostrar a conexão contada.
+
+**O que a análise achou.**
+- O critério 3 estava "Atende" com um roteiro local (`node proffy-fluxo.js`). A régua pede o teste no navegador passando no CI, e o critério 8 pede o axe dentro dele (comentário de 12/11 na #33). Os dois voltam a "Parcial" até o teste entrar no CI.
+- O ruleset `principal-protegida` está ativo, mas não exige o check `raiz` (`required_status_checks`), um dos critérios da #27.
+- `proffy.onrender.com` respondeu 200 em 15/11 com `theme-color` `#2E6D6E`: segue sendo o site de outra pessoa. O `render.yaml` ainda usa o nome `proffy`.
+- O `docs/DEPLOY.md` ainda manda mover `ci/` e fala em 8 testes; o README fala em 9. São 11.
+- `npm audit --omit=dev`: 0 vulnerabilidades. Dependabot: 0 alertas abertos. Dependências de produção já no patch e minor mais recentes da faixa; só sobram versões maiores (Express 5, `better-sqlite3` 12, `express-rate-limit` 8).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| O `webServer` do Playwright sobe o servidor antes dos testes e espera uma URL responder | `playwright.config.js` sobe `npm start` com banco novo e espera `/health` | [Playwright: web server](https://playwright.dev/docs/test-webserver) |
+| O `AxeBuilder` com `withTags` restringe a análise às regras WCAG A e AA | Teste roda o axe com as tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` em cada tela | [Playwright: testes de acessibilidade](https://playwright.dev/docs/accessibility-testing) |
+| `colorScheme` emula o modo escuro do sistema por projeto | Dois projetos no config: claro e escuro | [Playwright: emulação](https://playwright.dev/docs/emulation) |
+| `page.route` corta pedidos de rede para fora | Fontes e avatar externos respondem localmente; o WhatsApp é checado pelo `Location`, sem sair para a internet | [Playwright: rede](https://playwright.dev/docs/network) |
+| `inputmode="decimal"` abre o teclado numérico com vírgula no celular | Campo "Até R$" da busca por preço (#30) | [MDN: inputmode](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode) |
+| No Render Free, o disco é temporário e o serviço dorme após 15 minutos sem acesso | `DEPLOY.md` avisa que o banco volta vazio; nome de serviço próprio no `render.yaml` | [Render: plano gratuito](https://render.com/docs/free), [Render: Blueprint](https://render.com/docs/blueprint-spec) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Honestidade: critérios 3 e 8 conforme a régua; README e `DEPLOY.md` com 11 testes | Alto | Baixo | Este ciclo |
+| 2 | Fluxo na tela no CI, com axe claro e escuro (#33) | Alto | Médio | Este ciclo |
+| 3 | Filtro por preço máximo (#30) | Médio | Baixo | Este ciclo |
+| 4 | `render.yaml` com nome próprio e `DEPLOY.md` refeito | Médio | Baixo | Este ciclo; criar o serviço é do responsável (#26) |
+| 5 | Largura fixa no `main.css` (#34) | Baixo | Baixo | Issue |
+| 6 | Versões maiores das dependências | Médio | Médio | Issue nova |
+| 7 | Check `raiz` obrigatório no ruleset | Médio | Baixo | Responsável (#27) |
+
+**Fora do escopo.** Pagamento, agendamento, contas e avaliações.
+
+### Engenharia
+
+**Arquitetura.** Sem mudança: Express com Nunjucks, repositório SQL em `src/repository.js` sobre `better-sqlite3`, regras em `src/lib/validation.js`. O preço máximo entra como mais um parâmetro opcional da mesma consulta (`@maxCents IS NULL OR c.cost_cents <= @maxCents`). O teste de tela fica em `e2e/`, separado do `node --test`.
+
+**Riscos.**
+- O limite de 5 envios por minuto por IP vale também no teste de tela; os dois projetos (claro e escuro) mandam 4 envios no total.
+- Os projetos claro e escuro dividem o banco: cada um cadastra um professor com nome próprio.
+- `better-sqlite3` 11 não compila no Node 24 do Windows; o teste local usa a 12 sem gravar no lock. O CI usa Node 22.
+
+**Qualidade.** `npm test` (unidade e integração) e `npm run test:e2e` (Playwright + axe) no CI, em jobs separados; teclado (foco visível) no teste de tela.
+
+**Definição de pronto.** Os dois jobs verdes no PR, sem `skipped`; `docs/MVP.md`, README e `DEPLOY.md` atualizados.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Segurança: `npm audit --omit=dev` e Dependabot conferidos (0 e 0).
+2. `docs/MVP.md`: critérios 3 e 8 em "Parcial" até o teste de tela rodar no CI.
+3. Teste de tela no CI com Playwright e axe (#33).
+4. Filtro por preço máximo, com testes (#30).
+5. `render.yaml` com nome próprio e `docs/DEPLOY.md` refeito.
+6. `docs/MVP.md`, README e issues.
+
+**Vira issue.** #34 segue; versões maiores das dependências; check obrigatório no ruleset (comentado na #27).
+
+### Resultado
+
+- `npm test`: 13 de 13 (2 novos para o preço máximo). `npm run test:e2e`: 6 passed (3 por modo). Os dois no CI, [run 43795292316](https://github.com/douglasabnovato/proffy/actions/runs/43795292316), 15/11/2026, sem `skipped`.
+- O axe no teste de tela achou um defeito que o roteiro local de 09/11 não pegou: o botão Estudar tinha contraste de 3,49 em 375 px (fonte de 15 px). Corrigido para 4,73 com `--color-primary`.
+- Critérios: 9 de 10 → 7 de 10 (3 e 8 revistos para "Parcial") → 9 de 10 com o job `e2e`.
+- Issues novas: #41 (versões maiores), #42 (fontes locais), #43 (semente de demonstração), #44 (ordenar por preço).
