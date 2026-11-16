@@ -38,7 +38,7 @@ Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:te
 ```sh
 npm install
 npm run dev     # http://localhost:5500
-npm test        # 9 testes
+npm test        # 11 testes
 ```
 
 Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
