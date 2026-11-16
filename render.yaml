@@ -1,6 +1,6 @@
 # Blueprint do Render (plano gratuito): New > Blueprint > selecione este repositório
 # O nome "proffy" no Render é de outra conta (proffy.onrender.com serve outro projeto); por isso "proffy-estudo". Conferir o endereço real no painel (#26)
-# O SQLite fica em /tmp: o disco do plano gratuito é temporário e os dados voltam ao seed a cada reinício ou deploy
+# O SQLite fica em /tmp: o disco do plano gratuito é temporário e o banco volta vazio a cada reinício ou deploy
 services:
   - type: web
     name: proffy-estudo

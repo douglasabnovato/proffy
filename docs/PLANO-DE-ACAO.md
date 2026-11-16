@@ -212,3 +212,10 @@ Primeira passada: o axe acusou contraste nos rótulos da busca, porque o título
 6. `docs/MVP.md`, README e issues.
 
 **Vira issue.** #34 segue; versões maiores das dependências; check obrigatório no ruleset (comentado na #27).
+
+### Resultado
+
+- `npm test`: 13 de 13 (2 novos para o preço máximo). `npm run test:e2e`: 6 passed (3 por modo). Os dois no CI, [run 43795292316](https://github.com/douglasabnovato/proffy/actions/runs/43795292316), 15/11/2026, sem `skipped`.
+- O axe no teste de tela achou um defeito que o roteiro local de 09/11 não pegou: o botão Estudar tinha contraste de 3,49 em 375 px (fonte de 15 px). Corrigido para 4,73 com `--color-primary`.
+- Critérios: 9 de 10 → 7 de 10 (3 e 8 revistos para "Parcial") → 9 de 10 com o job `e2e`.
+- Issues novas: #41 (versões maiores), #42 (fontes locais), #43 (semente de demonstração), #44 (ordenar por preço).

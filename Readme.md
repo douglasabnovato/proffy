@@ -1,4 +1,4 @@
-> **Projeto de estudo.** Estado conferido em 30/10/2026: Detalhes em [docs/AVALIACAO.md](docs/AVALIACAO.md) e próximos passos em [docs/PLANO-ESTRATEGICO.md](docs/PLANO-ESTRATEGICO.md).
+> **Projeto de estudo (N1).** Estado conferido em 15/11/2026: 9 de 10 critérios aplicáveis atendidos. Detalhes em [docs/MVP.md](docs/MVP.md); avaliação inicial de 30/10/2026 em [docs/AVALIACAO.md](docs/AVALIACAO.md).
 
 ## 🧠 O que aprendi
 
@@ -8,12 +8,13 @@
 - Guardar dados em SQLite com `better-sqlite3`.
 - Limitar abuso com `express-rate-limit` e proteger cabeçalhos com Helmet.
 - Testar a aplicação com `node --test`.
+- Testar o fluxo no navegador com Playwright e checar acessibilidade com axe.
 
 ## Proffy
 
 ![Proffy](./.github/tela-2.PNG)
 
-Conecta alunos a professores particulares por matéria, dia da semana e horário.
+Conecta alunos a professores particulares por matéria, dia da semana, horário e preço.
 
 ### Problema e proposta
 
@@ -25,53 +26,63 @@ Encontrar aula particular no horário certo depende de indicação. No Proffy o 
 ### Funcionalidades
 
 - Cadastro de professor com vários horários, validação por campo e aviso de que os dados ficam públicos.
-- Busca pela matéria, com dia e hora opcionais e os horários de cada professor no cartão; com hora, o intervalo é [início, fim) (08:30–12:00 inclui 11:59, exclui 12:00).
+- Busca pela matéria, com dia, hora e preço máximo opcionais e os horários de cada professor no cartão; com hora, o intervalo é [início, fim) (08:30–12:00 inclui 11:59, exclui 12:00); o preço aceita "80,50".
 - Botão "Entrar em contato" que conta a conexão e abre o WhatsApp com mensagem pronta.
 - Páginas de sucesso, 404 e 500.
 
 ### Stack
 
-Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest.
+Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest · Playwright + axe.
 
 ### Como rodar
 
 ```sh
-npm install
-npm run dev     # http://localhost:5500
-npm test        # 11 testes
+npm ci
+npm run dev                      # http://localhost:5500
+npm test                         # 13 testes de unidade e integração
+npx playwright install chromium  # uma vez
+npm run test:e2e                 # 6 testes no navegador (claro e escuro), com axe
 ```
+
+No Windows com Node 24, o `better-sqlite3` 11 não compila. Contorno sem mexer no lock: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12` (#41).
 
 Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
 
 ### Em produção
 
-- **Fora do ar.** Em 06/11/2026, `proffy.onrender.com` respondia 200, mas servia o projeto de outra pessoa, não este. O `render.yaml` precisa de outro nome de serviço; decisão na #26. Para ver o projeto, rode localmente (seção "Como rodar").
+- **Fora do ar.** O serviço no Render ainda não foi criado (#26). Em 15/11/2026, `proffy.onrender.com` respondia 200, mas servia o projeto de outra pessoa (`theme-color` `#2E6D6E`). O `render.yaml` agora usa o nome `proffy-estudo`. Para ver o projeto, rode localmente (seção "Como rodar").
 - GitHub Pages não serve aqui: o projeto tem servidor Express e banco SQLite, e o Pages só publica arquivos estáticos.
-- O SQLite de produção fica em `/tmp/proffy.sqlite`: professores e conexões cadastrados **somem a cada reinício ou deploy** (o banco sobe vazio).
-- Passo a passo completo (inclui mover `ci/` para `.github/workflows/`): [docs/DEPLOY.md](docs/DEPLOY.md).
+- No Render Free, o SQLite fica em `/tmp/proffy.sqlite`: professores e conexões **somem a cada reinício ou deploy** (o banco sobe vazio).
+- Passo a passo: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-## Estado e próximos passos (ciclo de 07/11/2026)
+## Estado e próximos passos (ciclo de 15/11/2026)
 
-Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**: o que falta (#28) depende do responsável. A `master` está protegida desde 10/11/2026 (#27).
+Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**: o que falta (critério 9, #28) depende do responsável. O ciclo de 07/11 e o de 15/11 esperam o merge da sprint na `master` (PR #37).
 
 **O que foi feito**
 - Estado de estudo registrado e comando de testes corrigido (#14).
 - MVP de estudo com foco visível e `main` na inicial (#21).
 - Banco com dados pessoais fora do Git (#23).
 - CI também nos PRs para `developer/**`, código antigo removido, teste da página de erro (#25).
-- Ciclo de 07/11: busca só pela matéria, com dia e hora opcionais e os horários no cartão (#31); título da tela Estudar em uma linha; fluxo cadastro → busca → contato percorrido na tela, com axe sem violações (#29).
+- Busca só pela matéria, com dia e hora opcionais e os horários no cartão; título da tela Estudar em uma linha (#35).
+- Critério 10 com a `master` protegida (#38).
+- Ciclo de 15/11: teste de tela com Playwright e axe no CI, nos modos claro e escuro; contraste do botão Estudar no celular; filtro por preço máximo; deploy preparado com nome de serviço próprio (#40).
 
 **O que queremos fazer**
-- #26 Decidir a publicação no Render com nome de serviço próprio (responsável).
+- #36 Mesclar a sprint na `master` (responsável).
+- #26 Criar o serviço no Render com o nome `proffy-estudo` (responsável).
+- #27 Exigir os checks `raiz` e `e2e` no ruleset da `master` (responsável).
 - #28 Decidir o histórico com o banco de telefones (responsável).
-- #36 Mesclar o ciclo de 07/11 na `master` (responsável; o merge foi negado à sessão do agente).
-- #30 Filtrar a busca por preço máximo.
-- #33 Rodar no CI o fluxo na tela com Playwright e axe.
 - #34 Tirar a largura fixa de `h1`, `span` e `a` do `main.css`.
+- #41 Atualizar Express, `better-sqlite3` e `express-rate-limit` para as versões maiores.
+- #42 Servir as fontes do próprio servidor, sem o Google Fonts.
+- #43 Semear professores fictícios no banco de demonstração vazio.
+- #44 Ordenar a busca por preço.
 
 **Onde está a documentação**
 - Estado e critérios: [docs/MVP.md](docs/MVP.md)
-- Plano, pesquisa, backlog e registro do fluxo na tela: [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md) (seção "Ciclo de 07/11/2026")
+- Plano, pesquisa e backlog de cada ciclo: [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md) (seção "Ciclo de 15/11/2026")
+- Publicação: [docs/DEPLOY.md](docs/DEPLOY.md)
 
 ### Design
 
