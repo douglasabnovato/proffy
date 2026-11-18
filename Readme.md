@@ -32,7 +32,7 @@ Encontrar aula particular no horário certo depende de indicação. No Proffy o 
 
 ### Stack
 
-Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest · Playwright + axe.
+Node 22 · Express 5 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest · Playwright + axe.
 
 ### Como rodar
 
