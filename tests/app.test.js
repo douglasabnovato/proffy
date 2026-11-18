@@ -173,4 +173,25 @@ test("busca por preço máximo: acima some, igual e abaixo aparecem, inválido �
   const blank = await request(app).get("/study").query({ subject: 8, max_cost: "" }).expect(200);
   assert.match(blank.text, /Ana Lima/);
 });
+
+test("limite de escrita: o 6º envio no mesmo minuto recebe 429 (#41)", async () => {
+  const { app } = build();
+  for (let i = 0; i < 5; i++) await request(app).post("/give-classes").type("form").send({}).expect(422);
+  const res = await request(app).post("/give-classes").type("form").send(form).expect(429);
+  assert.match(res.headers["ratelimit-policy"], /5;w=60/);
+});
+
+test("fontes servidas pelo próprio app: sem Google Fonts no HTML nem na CSP (#42)", async () => {
+  const { app } = build();
+  const res = await request(app).get("/").expect(200);
+  assert.doesNotMatch(res.text, /fonts\.(googleapis|gstatic)\.com/);
+  assert.doesNotMatch(res.headers["content-security-policy"], /fonts\.(googleapis|gstatic)\.com/);
+  assert.match(res.headers["content-security-policy"], /font-src 'self'/);
+  const css = await request(app).get("/style/main.css").expect(200);
+  assert.match(css.text, /url\("\/fonts\/poppins-latin-400-normal\.woff2"\)/);
+  for (const file of ["archivo-latin-400-normal", "archivo-latin-700-normal", "poppins-latin-400-normal", "poppins-latin-600-normal"]) {
+    const font = await request(app).get(`/fonts/${file}.woff2`).expect(200);
+    assert.equal(font.headers["content-type"], "font/woff2");
+  }
+});
 /* Fim de app.test.js */

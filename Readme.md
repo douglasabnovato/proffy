@@ -1,4 +1,4 @@
-> **Projeto de estudo (N1).** Estado conferido em 16/11/2026: 8 de 10 critérios aplicáveis atendidos. Detalhes em [docs/MVP.md](docs/MVP.md); avaliação inicial de 30/10/2026 em [docs/AVALIACAO.md](docs/AVALIACAO.md).
+> **Projeto de estudo (N1).** Estado conferido em 18/11/2026: 9 de 10 critérios aplicáveis atendidos. Detalhes em [docs/MVP.md](docs/MVP.md); avaliação inicial de 30/10/2026 em [docs/AVALIACAO.md](docs/AVALIACAO.md).
 
 ## 🧠 O que aprendi
 
@@ -32,19 +32,19 @@ Encontrar aula particular no horário certo depende de indicação. No Proffy o 
 
 ### Stack
 
-Node 22 · Express 4 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest · Playwright + axe.
+Node 22 · Express 5 · Nunjucks · SQLite (better-sqlite3) · helmet · node:test + supertest · Playwright + axe.
 
 ### Como rodar
 
 ```sh
 npm ci
 npm run dev                      # http://localhost:5500
-npm test                         # 13 testes de unidade e integração
+npm test                         # 15 testes de unidade e integração
 npx playwright install chromium  # uma vez
 npm run test:e2e                 # 3 testes no navegador (Chromium), com axe
 ```
 
-No Windows com Node 24, o `better-sqlite3` 11 não compila. Contorno sem mexer no lock: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12` (#41).
+Pede Node 22.12 ou mais novo (o `better-sqlite3` 13 e o `@axe-core/playwright` 4.14 exigem). O `better-sqlite3` 13 traz o binário pronto para Windows, Linux e macOS: o `npm ci` não compila nada (#41).
 
 Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
 
@@ -55,9 +55,9 @@ Para migrar dados de uma cópia local antiga do banco, que não está mais no Gi
 - No Render Free, o SQLite fica em `/tmp/proffy.sqlite`: professores e conexões **somem a cada reinício ou deploy** (o banco sobe vazio).
 - Passo a passo: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-## Estado e próximos passos (ciclo de 15/11/2026)
+## Estado e próximos passos (ciclo de 18/11/2026)
 
-Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**: sim; o que falta (critério 9, #28, e critério 10, #27) depende do responsável. Os ciclos de 07/11 e de 15/11 já estão na `master`: o PR #37 (sprint de 12/11 → `master`) foi mesclado em 16/11/2026. O que vem depois entra pela `developer/sprint-2026-11-19`, cujo PR para a `master` espera a revisão do responsável. Os alertas do Dependabot estão ligados, com 0 abertos em 16/11/2026; o critério 9 segue Parcial só pelo banco no histórico (#28).
+Projeto de estudo (N1): 9 de 10 critérios aplicáveis atendidos. **Finalizado**: sim; o que falta (critério 9, #28) depende do responsável. O critério 10 passou a Atende em 18/11/2026: o ruleset da `master` exige o check `raiz`. O ciclo de 18/11 entra pela `developer/sprint-2026-11-19`; o merge na `master` é do responsável. Os alertas do Dependabot estão ligados, com 0 abertos em 18/11/2026.
 
 **O que foi feito**
 - Estado de estudo registrado e comando de testes corrigido (#14).
@@ -67,17 +67,12 @@ Projeto de estudo (N1): 8 de 10 critérios aplicáveis atendidos. **Finalizado**
 - Busca só pela matéria, com dia e hora opcionais e os horários no cartão; título da tela Estudar em uma linha (#35).
 - Critério 10 com a `master` protegida (#38).
 - Ciclo de 15/11: teste de tela com Playwright e axe no CI; contraste do botão Estudar no celular; filtro por preço máximo; deploy preparado com nome de serviço próprio (#40). O app não tem tema escuro próprio; o teste roda só no modo claro.
+- Ciclo de 18/11: largura fixa de `h1`, `span` e `a` retirada (#34); fontes do próprio servidor, sem o Google Fonts (#42); Express 5, `better-sqlite3` 13 e `express-rate-limit` 8 (#41).
 
-**O que queremos fazer**
-- #36 Fechar a issue: o merge que ela pedia saiu no PR #37, em 16/11/2026 (responsável).
+**O que queremos fazer** (próximos passos: #34, #41 e #42 fecham no merge na `master`)
 - #26 Criar o serviço no Render com o nome `proffy-estudo` (responsável).
-- #27 Exigir os checks `raiz` e `e2e` no ruleset da `master` (responsável).
+- #27 Fechar a issue: o ruleset já exige o check `raiz` (responsável; exigir também o `e2e` é opcional).
 - #28 Decidir o histórico com o banco de telefones (responsável).
-- #34 Tirar a largura fixa de `h1`, `span` e `a` do `main.css`.
-- #41 Atualizar Express, `better-sqlite3` e `express-rate-limit` para as versões maiores.
-- #42 Servir as fontes do próprio servidor, sem o Google Fonts.
-- #43 Semear professores fictícios no banco de demonstração vazio.
-- #44 Ordenar a busca por preço.
 
 **Onde está a documentação**
 - Estado e critérios: [docs/MVP.md](docs/MVP.md)
