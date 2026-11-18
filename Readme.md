@@ -44,7 +44,7 @@ npx playwright install chromium  # uma vez
 npm run test:e2e                 # 3 testes no navegador (Chromium), com axe
 ```
 
-No Windows com Node 24, o `better-sqlite3` 11 não compila. Contorno sem mexer no lock: `npm ci --ignore-scripts && npm i --no-save better-sqlite3@12` (#41).
+Pede Node 22.12 ou mais novo (o `better-sqlite3` 13 e o `@axe-core/playwright` 4.14 exigem). O `better-sqlite3` 13 traz o binário pronto para Windows, Linux e macOS: o `npm ci` não compila nada (#41).
 
 Para migrar dados de uma cópia local antiga do banco, que não está mais no Git: `DATABASE_FILE=./src/database/database.sqlite npm start` (horários corrompidos pelo bug antigo são descartados).
 
