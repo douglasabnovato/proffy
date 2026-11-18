@@ -1,13 +1,14 @@
 # MVP — proffy
 
-> Revisto em 16/11/2026 (ciclo de 15/11/2026, com a correção da revisão independente; critério 9 reconferido às 12h01, com os alertas do Dependabot ligados). Nível: **Estudo (N1)**. Os critérios 5 e 7 não se aplicam ao N1 e saem da conta. Testado no Windows, com Node 24.22.1, `better-sqlite3` 12 instalado sem gravar no lock (`npm ci --ignore-scripts && npm i --no-save better-sqlite3@12`), e no CI (Ubuntu, Node 22). Não houve teste com pessoas nem em aparelho real.
+> Revisto em 18/11/2026 (ciclo de 18/11/2026: critério 10 reconferido pela API às 19h59). Nível: **Estudo (N1)**. Os critérios 5 e 7 não se aplicam ao N1 e saem da conta. Testado no Windows, com Node 22.23.4 e `npm ci` sem contorno (o `better-sqlite3` 13 traz o binário pronto, #41), e no CI (Ubuntu, Node 22). Não houve teste com pessoas nem em aparelho real.
 
-**Resumo:** 8 de 10 aplicáveis atendidos
+**Nível:** N1
+**Resumo:** 9 de 10 aplicáveis atendidos
 **Finalizado:** sim
 
-Os 2 critérios que faltam dependem do responsável e têm issue com o rótulo `depende-do-responsavel`: 9 (#28) e 10 (#27). Os critérios 3 e 8 estavam com evidência só local; desde 15/11/2026 o teste de tela roda no CI (job `e2e`, #33).
+O critério que falta depende do responsável e tem issue com o rótulo `depende-do-responsavel`: 9 (#28). O critério 10 passou a Atende em 18/11/2026: o ruleset da `master` exige o check `raiz` (#27).
 
-## Critérios (16/11/2026)
+## Critérios (18/11/2026)
 
 | # | Critério | Como verificar | Situação | Evidência e data |
 |---|---|---|---|---|
@@ -19,10 +20,10 @@ Os 2 critérios que faltam dependem do responsável e têm issue com o rótulo `
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta | Atende: dados inválidos dão 422 com mensagens (também na tela, 7 mensagens); filtro inválido não busca e pede a matéria; preço inválido é ignorado; busca sem resultado diz "Nenhum professor encontrado"; rota e aula inexistentes dão 404; falha interna dá 500 sem vazar o detalhe. | `npm test` no job `raiz`, [run 43795292316](https://github.com/douglasabnovato/proffy/actions/runs/43795292316), 15/11/2026: 13 de 13, `# skipped 0` |
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não se aplica (N1). Sem publicação: `proffy.onrender.com` serve o projeto de outra pessoa. | #26 |
 | 8 | Acessibilidade básica | axe e teclado | Atende: axe (WCAG 2.1 A e AA) sem violações em início, "Dar aulas" com erros, sucesso, busca com e sem resultado e inicial com conexão, em 1280 px, no modo claro (o app não tem tema escuro próprio: nenhum CSS usa `prefers-color-scheme`); início, busca e "Dar aulas" também em 375 px, sem rolagem horizontal; contorno de foco nos 4 campos da busca pelo teclado. O teste achou contraste de 3,49 no botão Estudar em 375 px; corrigido para 4,73. Em 16/11, o botão ganhou contorno branco, porque o fundo dele era o mesmo da página. | `npm run test:e2e` (`@axe-core/playwright` 4.14) no job `e2e`, [run 43797215558](https://github.com/douglasabnovato/proffy/actions/runs/43797215558) (PR #45), 16/11/2026: 3 passed |
-| 9 | Segurança e conformidade | Riscos decididos | Parcial: alertas do Dependabot ligados, com 0 abertos, e `npm audit --omit=dev` com 0 vulnerabilidades; consultas parametrizadas, `helmet` com CSP e limite de escrita. O que segura o "Parcial" é só o banco com telefones: saiu do Git em 02/11, mas segue no histórico, à espera da decisão do responsável. | `gh api "repos/douglasabnovato/proffy/dependabot/alerts?state=open&per_page=100"`, 16/11/2026 12h01: 0 abertos; `npm ci` e `npm audit --omit=dev`, 16/11/2026 12h01: found 0 vulnerabilities; #28 |
-| 10 | Entrega confiável | CI verde antes de entrar na principal | Parcial: ruleset `principal-protegida` ativo na `master` (PR obrigatório, sem force push nem exclusão); o workflow `CI` (jobs `raiz` e `e2e`) roda em PR e push para `master` e `developer/**`. O ruleset ainda não exige os checks `raiz` e `e2e` verdes; pedido ao responsável na #27. | `gh api repos/douglasabnovato/proffy/rulesets`, 15/11/2026: `principal-protegida`, `active` |
-| 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 13 testes de unidade e integração (horários, busca com e sem dia, hora e preço, filtros inválidos, injeção SQL, cadastro, contato, migração, páginas de erro) e 3 de tela no Chromium. | [run 43797215558](https://github.com/douglasabnovato/proffy/actions/runs/43797215558) (PR #45), 16/11/2026: `raiz` 13 de 13, `# skipped 0`, e `e2e` 3 passed |
-| 12 | Documentação honesta | Qualquer pessoa roda o projeto | Atende: comandos do README conferidos com o `package.json` (`start`, `dev`, `test`, `test:e2e`); sem link publicado, porque o serviço ainda não existe. | README, 15/11/2026 |
+| 9 | Segurança e conformidade | Riscos decididos | Parcial: alertas do Dependabot ligados, com 0 abertos, e `npm audit --omit=dev` com 0 vulnerabilidades; consultas parametrizadas, `helmet` com CSP e limite de escrita; desde 18/11, as fontes saem do próprio servidor e nenhuma página chama o Google Fonts (#42). O que segura o "Parcial" é só o banco com telefones: saiu do Git em 02/11, mas segue no histórico, à espera da decisão do responsável. | `gh api "repos/douglasabnovato/proffy/dependabot/alerts?state=open&per_page=100"`, 16/11/2026 12h01: 0 abertos; `npm ci` e `npm audit --omit=dev`, 16/11/2026 12h01: found 0 vulnerabilities; #28 |
+| 10 | Entrega confiável | CI verde antes de entrar na principal | Atende: ruleset `principal-protegida` ativo na `master`, com PR obrigatório, sem force push nem exclusão, e o check `raiz` (testes de unidade e integração) obrigatório no merge; o workflow `CI` (jobs `raiz` e `e2e`) roda em PR e push para `master` e `developer/**`. O job `e2e` roda em todo PR, mas não é obrigatório no ruleset (opcional, com o responsável, #27). | `gh api repos/douglasabnovato/proffy/rules/branches/master`, 18/11/2026 19h59: `deletion`, `non_fast_forward`, `pull_request`, `required_status_checks` com `raiz` |
+| 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 15 testes de unidade e integração (horários, busca com e sem dia, hora e preço, filtros inválidos, injeção SQL, cadastro, contato, migração, páginas de erro, limite de escrita, fontes sem terceiros) e 3 de tela no Chromium. | `npm test` e `npm run test:e2e` locais, 18/11/2026: 15 de 15, `# skipped 0`, e 3 passed; no CI, job `raiz` do PR do ciclo de 18/11 (link no PR). Antes: [run 43797215558](https://github.com/douglasabnovato/proffy/actions/runs/43797215558) (PR #45), 16/11/2026: 13 de 13 e 3 passed |
+| 12 | Documentação honesta | Qualquer pessoa roda o projeto | Atende: comandos do README conferidos com o `package.json` (`start`, `dev`, `test`, `test:e2e`); sem link publicado, porque o serviço ainda não existe. | README conferido com o `package.json`, 18/11/2026 |
 
 ## Hipótese
 
@@ -32,11 +33,14 @@ Acreditamos que buscar só pela matéria, com dia, hora e preço opcionais, deix
 
 Pagamento, agendamento, contas, avaliações e banco persistente.
 
-## Neste ciclo (15/11/2026)
+## Neste ciclo (18/11/2026)
 
-Teste de tela com Playwright e axe no CI, no modo claro (#33); contraste do botão Estudar em 375 px; filtro por preço máximo (#30); `render.yaml` com nome de serviço próprio e `docs/DEPLOY.md` refeito (#26).
+Largura fixa de `h1`, `span` e `a` retirada do `main.css` (#34); fontes servidas pelo próprio servidor, sem o Google Fonts, e CSP só com `'self'` para estilos e fontes (#42); Express 5, `better-sqlite3` 13 e `express-rate-limit` 8, com teste do limite de escrita (#41); critério 10 reconferido pela API (#27).
 
 ## Histórico
+
+- 18/11/2026: critério 10 passou de Parcial a Atende, porque o ruleset da `master` já exige o check `raiz` (conferido pela API às 19h59). Resumo: 8 → 9 de 10.
+- Ciclo de 15/11/2026: teste de tela com Playwright e axe no CI, no modo claro (#33); contraste do botão Estudar em 375 px; filtro por preço máximo (#30); `render.yaml` com nome de serviço próprio e `docs/DEPLOY.md` refeito (#26).
 
 - 16/11/2026: critério 9 reconferido depois que o responsável ligou os alertas do Dependabot: 0 abertos e 0 no audit de produção. Segue Parcial pelo banco no histórico (#28). Resumo igual: 8 de 10.
 
