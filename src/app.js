@@ -18,8 +18,8 @@ function createApp({ repo, trustProxy = false }) {
         directives: {
           "default-src": ["'self'"],
           "img-src": ["'self'", "https:", "data:"],
-          "style-src": ["'self'", "https://fonts.googleapis.com"],
-          "font-src": ["'self'", "https://fonts.gstatic.com"],
+          "style-src": ["'self'"],
+          "font-src": ["'self'"],
           "script-src": ["'self'"],
         },
       },
