@@ -174,6 +174,13 @@ test("busca por preço máximo: acima some, igual e abaixo aparecem, inválido �
   assert.match(blank.text, /Ana Lima/);
 });
 
+test("limite de escrita: o 6º envio no mesmo minuto recebe 429 (#41)", async () => {
+  const { app } = build();
+  for (let i = 0; i < 5; i++) await request(app).post("/give-classes").type("form").send({}).expect(422);
+  const res = await request(app).post("/give-classes").type("form").send(form).expect(429);
+  assert.match(res.headers["ratelimit-policy"], /5;w=60/);
+});
+
 test("fontes servidas pelo próprio app: sem Google Fonts no HTML nem na CSP (#42)", async () => {
   const { app } = build();
   const res = await request(app).get("/").expect(200);
